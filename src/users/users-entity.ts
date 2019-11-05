@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Club } from 'src/clubs/clubs-entity';
 
 @Entity()
 export class User {
@@ -11,7 +12,7 @@ export class User {
     email:string;
 
     @Column({ length: 25 })
-    pseudo:string;
+    nickname:string;
 
     @Column({length: 25}) 
     password:string;
@@ -20,8 +21,8 @@ export class User {
     gold:number;
 
     // reference club class
-    @Column()
-    club_id:number;
+    @ManyToOne(type => Club)
+    club: Club;
 
     // reference hereos class
     @Column()

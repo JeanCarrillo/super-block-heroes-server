@@ -1,7 +1,8 @@
+
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Monster {
+export class Club {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,22 +11,7 @@ export class Monster {
     name:string;
 
     @Column()
-    hp:number;
-
-    @Column({length: 25}) 
-    background:string;
-
-    @Column()
-    speed:number;
-
-    @Column({length: 25}) 
-    sprites:string;
-
-    @Column()
-    time_min:number;
-
-    @Column()
-    time_max:number;
+    score_team:number;
 
     @Column('date') 
     created_at:Date;
