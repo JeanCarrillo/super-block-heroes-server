@@ -8,6 +8,11 @@ export class HeroesController {
 
     constructor(private service: HeroesService) { }
 
+    @Get()
+    index(): Promise<Hero[]> {
+      return  this.service.getHeroes();
+    }
+
     @Get(':id')
     get(@Param() params) {
         return this.service.getHero(params.id);

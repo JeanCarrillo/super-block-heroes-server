@@ -8,9 +8,9 @@ export class UsersController {
 
     constructor(private service: UsersService) { }
 
-    @Get(':id')
-    get(@Param() params) {
-        return this.service.getUser(params.id);
+    @Get()
+    index(): Promise<User[]> {
+      return  this.service.getUsers();
     }
 
     @Post()

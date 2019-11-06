@@ -6,7 +6,7 @@ export class AppService {
   dbCredentials: { login: string; password: string };
   constructor() {}
   getHello() {
-    return 'Hello';
+    return 'Super Block Heroes Database';
   }
   // constructor(config: ConfigService) {
   //   // Please take note that this check is case sensitive!

@@ -9,7 +9,7 @@ export class HeroesService {
 
     constructor(@InjectRepository(Hero) private HeroesRepository: Repository<Hero>) { }
 
-    async getHeroes(Hero: Hero): Promise<Hero[]> {
+    async getHeroes(): Promise<Hero[]> {
         return await this.HeroesRepository.find();
     }
 

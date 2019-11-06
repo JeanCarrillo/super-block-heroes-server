@@ -1,6 +1,7 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Club } from 'src/clubs/clubs-entity';
+import { Hero } from 'src/heroes/heroes-entity';
 
 @Entity()
 export class User {
@@ -20,13 +21,11 @@ export class User {
     @Column()
     gold:number;
 
-    // reference club class
     @ManyToOne(type => Club)
     club: Club;
 
-    // reference hereos class
-    @Column()
-    heroes_id:number;
+    @ManyToOne(type => Hero)
+    hero: Hero;
 
     @Column('date') 
     created_at:Date;

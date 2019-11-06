@@ -9,7 +9,7 @@ export class MonstersService {
 
     constructor(@InjectRepository(Monster) private MonstersRepository: Repository<Monster>) { }
 
-    async getMonsters(Monster: Monster): Promise<Monster[]> {
+    async getMonsters(): Promise<Monster[]> {
         return await this.MonstersRepository.find();
     }
 

@@ -10,6 +10,9 @@ export class Hero {
     @Column({length: 25}) 
     name:string;
 
+    @Column({length: 255}) 
+    img:string;
+
     @Column('date') 
     created_at:Date;
 

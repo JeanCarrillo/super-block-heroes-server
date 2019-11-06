@@ -8,9 +8,9 @@ export class MonstersController {
 
     constructor(private service: MonstersService) { }
 
-    @Get(':id')
-    get(@Param() params) {
-        return this.service.getMonster(params.id);
+    @Get()
+    index(): Promise<Monster[]> {
+      return  this.service.getMonsters();
     }
 
     @Post()
