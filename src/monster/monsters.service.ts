@@ -1,5 +1,5 @@
 
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, All } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Monster } from './monsters-entity';
@@ -13,11 +13,8 @@ export class MonstersService {
         return await this.MonstersRepository.find();
     }
 
-    async getMonster(_id: number): Promise<Monster[]> {
-        return await this.MonstersRepository.find({
-            select: ["name"],
-            where: [{ "id": _id }]
-        });
+    async getMonster(_id): Promise<Monster[]> {
+        return await this.MonstersRepository.findByIds(_id);
     }
 
     async createMonster(Monster:Monster) {

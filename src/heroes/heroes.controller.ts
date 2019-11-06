@@ -14,8 +14,8 @@ export class HeroesController {
     }
 
     @Get(':id')
-    get(@Param() params) {
-        return this.service.getHero(params.id);
+    find(@Param() id): Promise<Hero[]> {
+      return  this.service.getHero(id.id);
     }
 
     @Post()

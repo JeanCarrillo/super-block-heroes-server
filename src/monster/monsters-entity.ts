@@ -18,33 +18,8 @@ export class Monster {
     @Column()
     speed:number;
 
-    @Column("simple-json") 
-    sprites: 
-    {   
-        name: string,
-        hp: number,
-        background: number,
-        speed: number,
-        time_min: number,
-        time_max: number,
-        sprites: 
-            {
-                width:number, 
-                height:number,
-                moving: 
-                    {
-                        y:number,
-                        xMin:number,
-                        xMax:number
-                    },
-                attacking:
-                {
-                    y:number,
-                    xMin:number,
-                    xMax:number
-                }
-            },
-       };
+    @Column({length: 225}) 
+    sprites: string;
 
     @Column()
     time_min:number;

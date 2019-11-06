@@ -18,6 +18,7 @@ import { Club } from './clubs/clubs-entity';
 import { Capacity } from './capacities/capacities-entity';
 import { Game } from './games/games-entity';
 import { FriendRelation } from './friends/friends-entity';
+import { Connection } from 'typeorm';
 
 
 @Module({
@@ -37,4 +38,7 @@ import { FriendRelation } from './friends/friends-entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly connection: Connection) {}
+}
+

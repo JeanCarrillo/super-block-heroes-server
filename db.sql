@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 06 nov. 2019 à 10:53
+-- Généré le :  mer. 06 nov. 2019 à 12:57
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.3.1
 
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `monster` (
   `time_max` int(11) NOT NULL,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL,
-  `sprites` text NOT NULL,
+  `sprites` varchar(225) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
@@ -233,10 +233,10 @@ CREATE TABLE IF NOT EXISTS `monster` (
 --
 
 INSERT INTO `monster` (`id`, `name`, `hp`, `background`, `speed`, `time_min`, `time_max`, `created_at`, `updated_at`, `sprites`) VALUES
-(1, 'Koopa Troopa', 100, '1', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{\r\n                width:40, \r\n                height:40,\r\n                moving: \r\n                    {\r\n                        y:0,\r\n                        xMin:2,\r\n                        xMax:3\r\n                    },\r\n                attacking:\r\n                {\r\n                    y:0,\r\n                    xMin:1,\r\n                    xMax:1\r\n                }\r\n            },\r\n       }'),
-(2, 'Super Koopa', 100, '1', 1, 1000, 5000, '2019-11-07', '2019-11-07', '{width:40,height:40,moving:{y:1,xMin:8,xMax:9},attacking:{y:1,xMin:7,xMax:7}}'),
-(3, 'Galoomba', 100, '1', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{width:40,height:40,moving:{y:9,xMin:0,xMax:1},attacking:{y:10,xMin:0,xMax:1}}'),
-(4, 'Boo', 100, '1', 1, 1000, 5000, '2019-11-07', '2019-11-21', '{width:25,height:40,moving:{y:20,xMin:0,xMax:1},attacking:{y:20,xMin:2,xMax:3}}');
+(1, 'Koopa Troopa', 100, '1', 1, 1000, 5000, '2019-11-06', '2019-11-14', '`{\"width\":40,\"height\":40,\"moving\":{\"y\":0,\"xMin\":2,\"xMax\":3},\"attacking\":{\"y\":0,\"xMin\":1,\"xMax\":1}}`'),
+(2, 'Super Koopa', 100, '1', 1, 1000, 5000, '2019-11-07', '2019-11-07', '`{\"width\":40,\"height\":40,\"moving\":{\"y\":1,\"xMin\":8,\"xMax\":9},\"attacking\":{\"y\":1,\"xMin\":7,\"xMax\":7}}`'),
+(3, 'Galoomba', 100, '1', 1, 1000, 5000, '2019-11-06', '2019-11-14', '`{\"width\":40,\"height\":40,\"moving\":{\"y\":1,\"xMin\":8,\"xMax\":9},\"attacking\":{\"y\":1,\"xMin\":7,\"xMax\":7}}`'),
+(4, 'Boo', 100, '1', 1, 1000, 5000, '2019-11-07', '2019-11-21', '`{\"width\":25,\"height\":40,\"moving\":{\"y\":20,\"xMin\":0,\"xMax\":1},\"attacking\":{\"y\":20,\"xMin\":2,\"xMax\":3}}`');
 
 -- --------------------------------------------------------
 

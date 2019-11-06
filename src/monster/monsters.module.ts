@@ -9,6 +9,7 @@ import { Monster } from './monsters-entity';
   imports: [TypeOrmModule.forFeature([Monster])],
   providers: [MonstersService],
   controllers: [MonstersController],
+  exports: [TypeOrmModule]
 })
 
-export class MonsterModule { }
+export class MonsterModule {}

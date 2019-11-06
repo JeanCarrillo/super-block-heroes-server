@@ -13,6 +13,11 @@ export class UsersController {
       return  this.service.getUsers();
     }
 
+    @Get(':id')
+    find(@Param() id): Promise<User[]> {
+      return  this.service.getUser(id.id);
+    }
+
     @Post()
     create(@Body() user: User) {
         return this.service.createUser(user);

@@ -13,11 +13,8 @@ export class HeroesService {
         return await this.HeroesRepository.find();
     }
 
-    async getHero(_id: number): Promise<Hero[]> {
-        return await this.HeroesRepository.find({
-            select: ["name"],
-            where: [{ "id": _id }]
-        });
+    async getHero(_id): Promise<Hero[]> {
+        return await this.HeroesRepository.findByIds(_id);
     }
 
     async createHero(Hero:Hero) {

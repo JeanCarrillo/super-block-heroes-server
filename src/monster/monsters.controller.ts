@@ -13,6 +13,11 @@ export class MonstersController {
       return  this.service.getMonsters();
     }
 
+    @Get(':id')
+    find(@Param() id): Promise<Monster[]> {
+      return  this.service.getMonster(id.id);
+    }
+
     @Post()
     create(@Body() Monster: Monster) {
         return this.service.createMonster(Monster);
