@@ -1,5 +1,5 @@
 
-import { Controller, Post, Body, Get, Put, Delete,Param} from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param} from '@nestjs/common';
 import { MonstersService } from './monsters.service';
 import { Monster } from './monsters-entity';
 
@@ -14,22 +14,24 @@ export class MonstersController {
     }
 
     @Get(':id')
-    find(@Param() id): Promise<Monster[]> {
-      return  this.service.getMonster(id.id);
+    find(@Param() data): Promise<Monster[]> {
+      return  this.service.getMonster(data.id);
     }
 
-    @Post()
-    create(@Body() Monster: Monster) {
-        return this.service.createMonster(Monster);
-    }
+    @Post('new')
+    async create(@Body() Monster: Monster): Promise<any> {
+      return this.service.createMonster(Monster);
+    }  
 
-    @Put()
-    update(@Body() Monster: Monster) {
-        return this.service.updateMonster(Monster);
-    }
+    @Put('update/:id')
+    async update(@Param('id') id, @Body() data: Monster): Promise<any> {
+        data.id = Number(id);
+        console.log('Update #' + data.id)
+        return this.service.updateMonster(data);
+    }  
 
-    @Delete(':id')
-    deleteMonster(@Param() params) {
-        return this.service.deleteMonster(params.id);
-    }
+    @Delete('delete/:id')
+    async delete(@Param('id') id): Promise<any> {
+      return this.service.deleteMonster(id);
+    }  
 }
