@@ -7,6 +7,9 @@ import {
   Delete,
   Param,
   Res,
+  HttpException,
+  HttpStatus,
+  Catch,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './users-entity';
@@ -21,7 +24,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findByNickname(@Param() params): Promise<User[]> {
+  findByNickname(@Param() params): Promise<User> {
     return this.service.getUser(params.id);
   }
 
@@ -37,18 +40,30 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() user: User) {
-    console.log(user);
-    return this.service.createUser(user);
+  create(@Body() user: User): Promise<any> {
+    return this.service.getUserByNickname(user.nickname).then(res => {
+      console.log('USERS CONTROLLER');
+      console.log(res);
+      if (res === undefined) {
+        return this.service.createUser(user).then(createdUser => {
+          return this.service.getUserByNickname(createdUser.nickname);
+        });
+      }
+      return this.service.getUserByNickname(user.nickname);
+    });
   }
 
-  @Put()
-  update(@Body() user: User) {
-    return this.service.updateUser(user);
+  @Put(':id')
+  update(@Param('id') id, @Body() user: User): Promise<User> {
+    user.id = Number(id);
+    console.log('Update #' + user.id);
+    return this.service.updateUser(user).then(() => {
+      return this.service.getUser(user.id);
+    });
   }
 
   @Delete(':id')
-  deleteUser(@Param() params) {
+  deleteUser(@Param('id') params): Promise<any> {
     return this.service.deleteUser(params.id);
   }
 }

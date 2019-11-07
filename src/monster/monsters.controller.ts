@@ -24,7 +24,7 @@ export class MonstersController {
     return this.service.getMonster(data.id);
   }
 
-  @Post('new')
+  @Post()
   async create(@Body() monster: Monster): Promise<any> {
     return this.service.createMonster(monster);
   }
