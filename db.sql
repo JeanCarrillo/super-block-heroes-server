@@ -238,8 +238,8 @@ CREATE TABLE IF NOT EXISTS `monster` (
 
 INSERT INTO `monster` (`id`, `name`, `hp`, `background`, `speed`, `time_min`, `time_max`, `created_at`, `updated_at`, `sprites`) VALUES
 (1, 'Koopa Troopa', 100, '1', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{"width":40,"height":40,"moving":{"y":0,"xMin":2,"xMax":3},"attacking":{"y":0,"xMin":1,"xMax":1}}'),
-(2, 'Super Koopa', 200, '2', 1, 1000, 5000, '2019-11-07', '2019-11-07', '{"width":40,"height":40,"moving":{"y":1,"xMin":8,"xMax":9},"attacking":{"y":1,"xMin":7,"xMax":7}}'),
-(3, 'Galoomba', 300, '3', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{"width":40,"height":40,"moving":{"y":9,"xMin":0,"xMax":1},"attacking":{"y":10,"xMin":0,"xMax":1}}'),
+(2, 'Super Koopa', 200, '2', 1, 1000, 5000, '2019-11-07', '2019-11-07', '{"width":40,"height":40,"moving":{"y":1,"xMin":8,"xMax":9},"attacking":{"y":0,"xMin":8,"xMax":10}}'),
+(3, 'Galoomba', 300, '3', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{"width":40,"height":39,"moving":{"y":9,"xMin":0,"xMax":1},"attacking":{"y":10,"xMin":0,"xMax":1}}'),
 (4, 'Boo', 400, '4', 1, 1000, 5000, '2019-11-07', '2019-11-21', '{"width":25,"height":40,"moving":{"y":20,"xMin":0,"xMax":1},"attacking":{"y":20,"xMin":2,"xMax":3}}');
 
 -- --------------------------------------------------------
