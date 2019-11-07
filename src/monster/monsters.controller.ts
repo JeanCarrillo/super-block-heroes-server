@@ -20,22 +20,24 @@ export class MonstersController {
   }
 
   @Get(':id')
-  find(@Param() id): Promise<Monster[]> {
-    return this.service.getMonster(id.id);
+  find(@Param() data): Promise<Monster[]> {
+    return this.service.getMonster(data.id);
   }
 
-  @Post()
-  create(@Body() monster: Monster) {
+  @Post('new')
+  async create(@Body() monster: Monster): Promise<any> {
     return this.service.createMonster(monster);
   }
 
-  @Put()
-  update(@Body() monster: Monster) {
-    return this.service.updateMonster(monster);
+  @Put('update/:id')
+  async update(@Param('id') id, @Body() data: Monster): Promise<any> {
+    data.id = Number(id);
+    console.log('Update #' + data.id);
+    return this.service.updateMonster(data);
   }
 
-  @Delete(':id')
-  deleteMonster(@Param() params) {
-    return this.service.deleteMonster(params.id);
+  @Delete('delete/:id')
+  async delete(@Param('id') id): Promise<any> {
+    return this.service.deleteMonster(id);
   }
 }
