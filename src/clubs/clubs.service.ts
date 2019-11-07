@@ -1,4 +1,3 @@
-
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,29 +5,30 @@ import { Club } from './clubs-entity';
 
 @Injectable()
 export class ClubsService {
+  constructor(
+    @InjectRepository(Club) private ClubsRepository: Repository<Club>,
+  ) {}
 
-    constructor(@InjectRepository(Club) private ClubsRepository: Repository<Club>) { }
+  async getClubs(club: Club): Promise<Club[]> {
+    return await this.ClubsRepository.find();
+  }
 
-    async getClubs(Club: Club): Promise<Club[]> {
-        return await this.ClubsRepository.find();
-    }
+  async getClub(id: number): Promise<Club[]> {
+    return await this.ClubsRepository.find({
+      select: ['name'],
+      where: [{ id }],
+    });
+  }
 
-    async getClub(_id: number): Promise<Club[]> {
-        return await this.ClubsRepository.find({
-            select: ["name"],
-            where: [{ "id": _id }]
-        });
-    }
+  async createClub(club: Club) {
+    this.ClubsRepository.create(club);
+  }
 
-    async createClub(Club:Club) {
-        this.ClubsRepository.create(Club);
-    }
+  async updateClub(club: Club) {
+    this.ClubsRepository.save(club);
+  }
 
-    async updateClub(Club: Club) {
-        this.ClubsRepository.save(Club)
-    }
-
-    async deleteClub(Club: Club) {
-        this.ClubsRepository.delete(Club);
-    }
+  async deleteClub(club: Club) {
+    this.ClubsRepository.delete(club);
+  }
 }

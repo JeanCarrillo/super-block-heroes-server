@@ -1,4 +1,3 @@
-
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,26 +5,27 @@ import { Hero } from './heroes-entity';
 
 @Injectable()
 export class HeroesService {
+  constructor(
+    @InjectRepository(Hero) private HeroesRepository: Repository<Hero>,
+  ) {}
 
-    constructor(@InjectRepository(Hero) private HeroesRepository: Repository<Hero>) { }
+  async getHeroes(): Promise<Hero[]> {
+    return await this.HeroesRepository.find();
+  }
 
-    async getHeroes(): Promise<Hero[]> {
-        return await this.HeroesRepository.find();
-    }
+  async getHero(id): Promise<Hero[]> {
+    return await this.HeroesRepository.findByIds(id);
+  }
 
-    async getHero(_id): Promise<Hero[]> {
-        return await this.HeroesRepository.findByIds(_id);
-    }
+  async createHero(hero: Hero) {
+    this.HeroesRepository.create(hero);
+  }
 
-    async createHero(Hero:Hero) {
-        this.HeroesRepository.create(Hero);
-    }
+  async updateHero(hero: Hero) {
+    this.HeroesRepository.save(hero);
+  }
 
-    async updateHero(Hero: Hero) {
-        this.HeroesRepository.save(Hero)
-    }
-
-    async deleteHero(Hero: Hero) {
-        this.HeroesRepository.delete(Hero);
-    }
+  async deleteHero(hero: Hero) {
+    this.HeroesRepository.delete(hero);
+  }
 }

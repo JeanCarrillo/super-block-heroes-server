@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FriendsService } from './friends.service';
@@ -10,5 +9,4 @@ import { FriendRelation } from './friends-entity';
   providers: [FriendsService],
   controllers: [FriendsController],
 })
-
-export class FriendsModule { }
+export class FriendsModule {}

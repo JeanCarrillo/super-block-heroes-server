@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CapacitiesService } from './capacities.service';
@@ -10,5 +9,4 @@ import { Capacity } from './capacities-entity';
   providers: [CapacitiesService],
   controllers: [CapacitiesController],
 })
-
-export class CapacityModule { }
+export class CapacityModule {}

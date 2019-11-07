@@ -1,31 +1,35 @@
-
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Hero } from 'src/heroes/heroes-entity';
 import { Monster } from 'src/monster/monsters-entity';
 
 @Entity()
 export class Capacity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @ManyToMany(type => Hero)
+  @JoinTable()
+  heroes: Hero[];
 
-    @ManyToMany(type => Hero)
-    @JoinTable()
-    heroes: Hero[];
+  @ManyToMany(type => Monster)
+  @JoinTable()
+  monsters: Monster[];
 
-    @ManyToMany(type => Monster)
-    @JoinTable()
-    monsters: Monster[];
+  @Column({ length: 25 })
+  name: string;
 
-    @Column({length: 25}) 
-    name:string;
+  @Column()
+  power: string;
 
-    @Column()
-    power:string;
+  @Column('date')
+  created_at: Date;
 
-    @Column('date') 
-    created_at:Date;
-
-    @Column('date') 
-    updated_at:Date;
+  @Column('date')
+  updated_at: Date;
 }

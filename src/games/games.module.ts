@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GamesService } from './games.service';
@@ -10,5 +9,4 @@ import { Game } from './games-entity';
   providers: [GamesService],
   controllers: [GamesController],
 })
-
-export class GameModule { }
+export class GameModule {}

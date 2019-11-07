@@ -1,35 +1,41 @@
-
-import { Controller, Post, Body, Get, Put, Delete,Param} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Put,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { HeroesService } from './heroes.service';
 import { Hero } from './heroes-entity';
 
 @Controller('Heroes')
 export class HeroesController {
+  constructor(private service: HeroesService) {}
 
-    constructor(private service: HeroesService) { }
+  @Get()
+  index(): Promise<Hero[]> {
+    return this.service.getHeroes();
+  }
 
-    @Get()
-    index(): Promise<Hero[]> {
-      return  this.service.getHeroes();
-    }
+  @Get(':id')
+  find(@Param() id): Promise<Hero[]> {
+    return this.service.getHero(id.id);
+  }
 
-    @Get(':id')
-    find(@Param() id): Promise<Hero[]> {
-      return  this.service.getHero(id.id);
-    }
+  @Post()
+  create(@Body() hero: Hero) {
+    return this.service.createHero(hero);
+  }
 
-    @Post()
-    create(@Body() Hero: Hero) {
-        return this.service.createHero(Hero);
-    }
+  @Put()
+  update(@Body() hero: Hero) {
+    return this.service.updateHero(hero);
+  }
 
-    @Put()
-    update(@Body() Hero: Hero) {
-        return this.service.updateHero(Hero);
-    }
-
-    @Delete(':id')
-    deleteHero(@Param() params) {
-        return this.service.deleteHero(params.id);
-    }
+  @Delete(':id')
+  deleteHero(@Param() params) {
+    return this.service.deleteHero(params.id);
+  }
 }

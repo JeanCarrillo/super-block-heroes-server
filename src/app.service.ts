@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '../config/config.service';
+// import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class AppService {
-  dbCredentials: { login: string; password: string };
+  // dbCredentials: { login: string; password: string };
   constructor() {}
   getHello() {
     return 'Super Block Heroes Database';

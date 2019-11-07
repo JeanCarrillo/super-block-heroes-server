@@ -1,35 +1,41 @@
-
-import { Controller, Post, Body, Get, Put, Delete,Param} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Put,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { MonstersService } from './monsters.service';
 import { Monster } from './monsters-entity';
 
 @Controller('Monsters')
 export class MonstersController {
+  constructor(private service: MonstersService) {}
 
-    constructor(private service: MonstersService) { }
+  @Get()
+  index(): Promise<Monster[]> {
+    return this.service.getMonsters();
+  }
 
-    @Get()
-    index(): Promise<Monster[]> {
-      return  this.service.getMonsters();
-    }
+  @Get(':id')
+  find(@Param() id): Promise<Monster[]> {
+    return this.service.getMonster(id.id);
+  }
 
-    @Get(':id')
-    find(@Param() id): Promise<Monster[]> {
-      return  this.service.getMonster(id.id);
-    }
+  @Post()
+  create(@Body() monster: Monster) {
+    return this.service.createMonster(monster);
+  }
 
-    @Post()
-    create(@Body() Monster: Monster) {
-        return this.service.createMonster(Monster);
-    }
+  @Put()
+  update(@Body() monster: Monster) {
+    return this.service.updateMonster(monster);
+  }
 
-    @Put()
-    update(@Body() Monster: Monster) {
-        return this.service.updateMonster(Monster);
-    }
-
-    @Delete(':id')
-    deleteMonster(@Param() params) {
-        return this.service.deleteMonster(params.id);
-    }
+  @Delete(':id')
+  deleteMonster(@Param() params) {
+    return this.service.deleteMonster(params.id);
+  }
 }

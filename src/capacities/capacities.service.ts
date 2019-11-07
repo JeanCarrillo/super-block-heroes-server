@@ -1,4 +1,3 @@
-
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,29 +5,31 @@ import { Capacity } from './capacities-entity';
 
 @Injectable()
 export class CapacitiesService {
+  constructor(
+    @InjectRepository(Capacity)
+    private CapacitiesRepository: Repository<Capacity>,
+  ) {}
 
-    constructor(@InjectRepository(Capacity) private CapacitiesRepository: Repository<Capacity>) { }
+  async getCapacities(capacity: Capacity): Promise<Capacity[]> {
+    return await this.CapacitiesRepository.find();
+  }
 
-    async getCapacities(Capacity: Capacity): Promise<Capacity[]> {
-        return await this.CapacitiesRepository.find();
-    }
+  async getCapacity(id: number): Promise<Capacity[]> {
+    return await this.CapacitiesRepository.find({
+      select: ['name'],
+      where: [{ id }],
+    });
+  }
 
-    async getCapacity(_id: number): Promise<Capacity[]> {
-        return await this.CapacitiesRepository.find({
-            select: ["name"],
-            where: [{ "id": _id }]
-        });
-    }
+  async createCapacity(capacity: Capacity) {
+    this.CapacitiesRepository.create(capacity);
+  }
 
-    async createCapacity(Capacity:Capacity) {
-        this.CapacitiesRepository.create(Capacity);
-    }
+  async updateCapacity(capacity: Capacity) {
+    this.CapacitiesRepository.save(capacity);
+  }
 
-    async updateCapacity(Capacity: Capacity) {
-        this.CapacitiesRepository.save(Capacity)
-    }
-
-    async deleteCapacity(Capacity: Capacity) {
-        this.CapacitiesRepository.delete(Capacity);
-    }
+  async deleteCapacity(capacity: Capacity) {
+    this.CapacitiesRepository.delete(capacity);
+  }
 }

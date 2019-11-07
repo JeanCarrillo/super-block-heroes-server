@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClubsService } from './Clubs.service';
@@ -10,5 +9,4 @@ import { Club } from './clubs-entity';
   providers: [ClubsService],
   controllers: [ClubsController],
 })
-
-export class ClubModule { }
+export class ClubModule {}

@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MonstersService } from './monsters.service';
@@ -9,7 +8,6 @@ import { Monster } from './monsters-entity';
   imports: [TypeOrmModule.forFeature([Monster])],
   providers: [MonstersService],
   controllers: [MonstersController],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
-
 export class MonsterModule {}

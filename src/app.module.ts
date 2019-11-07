@@ -20,7 +20,6 @@ import { Game } from './games/games-entity';
 import { FriendRelation } from './friends/friends-entity';
 import { Connection } from 'typeorm';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -33,7 +32,13 @@ import { Connection } from 'typeorm';
       entities: [User, Monster, Hero, Club, Capacity, Game, FriendRelation],
       synchronize: true,
     }),
-    UsersModule, MonsterModule, HeroesModule, ClubModule, CapacityModule, GameModule, FriendsModule
+    UsersModule,
+    MonsterModule,
+    HeroesModule,
+    ClubModule,
+    CapacityModule,
+    GameModule,
+    FriendsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -41,4 +46,3 @@ import { Connection } from 'typeorm';
 export class AppModule {
   constructor(private readonly connection: Connection) {}
 }
-
