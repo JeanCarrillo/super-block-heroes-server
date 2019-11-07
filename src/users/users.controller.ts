@@ -6,6 +6,7 @@ import {
   Put,
   Delete,
   Param,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './users-entity';
@@ -20,17 +21,24 @@ export class UsersController {
   }
 
   @Get(':id')
-  findByNickname(@Param() id): Promise<User[]> {
-    return this.service.getUser(id.id);
+  findByNickname(@Param() params): Promise<User[]> {
+    return this.service.getUser(params.id);
   }
 
   @Get('nickname/:nickname')
-  find(@Param() nickname): Promise<User> {
-    return this.service.getUserByNickname(nickname.nickname);
+  async find(@Param() params, @Res() response) {
+    const user = await this.service.getUserByNickname(params.nickname);
+
+    if (user === undefined) {
+      response.sendStatus(404);
+    }
+
+    response.json(user);
   }
 
   @Post()
   create(@Body() user: User) {
+    console.log(user);
     return this.service.createUser(user);
   }
 

@@ -21,10 +21,12 @@ export class UsersService {
     return await this.usersRepository.findOne({
       where: { nickname },
       select: ['id', 'nickname', 'email', 'gold', 'hero'],
+      relations: ['hero'],
     });
   }
 
   async createUser(user: User) {
+    console.log(user);
     this.usersRepository.create(user);
   }
 
