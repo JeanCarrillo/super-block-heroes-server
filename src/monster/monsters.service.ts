@@ -1,8 +1,7 @@
-import { Injectable, All } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { Monster } from './monsters-entity';
-
 @Injectable()
 export class MonstersService {
   constructor(
@@ -17,15 +16,15 @@ export class MonstersService {
     return await this.MonstersRepository.findByIds(id);
   }
 
-  async createMonster(monster: Monster) {
-    this.MonstersRepository.create(monster);
+  async createMonster(monster: Monster): Promise<Monster> {
+    return await this.MonstersRepository.save(monster);
   }
 
-  async updateMonster(monster: Monster) {
-    this.MonstersRepository.save(monster);
+  async updateMonster(monster: Monster): Promise<UpdateResult> {
+    return await this.MonstersRepository.update(monster.id, monster);
   }
 
-  async deleteMonster(monster: Monster) {
-    this.MonstersRepository.delete(monster);
+  async deleteMonster(id): Promise<DeleteResult> {
+    return await this.MonstersRepository.delete(id);
   }
 }
