@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 -- Structure de la table `capacity`
 --
 
-DROP DATABASE IF EXISTS `sbheroes`;
-CREATE DATABASE `sbheroes`;
-USE `sbheroes`;
+-- DROP DATABASE IF EXISTS sbheroes;
+-- CREATE DATABASE sbheroes;
+-- USE sbheroes;
 
 DROP TABLE IF EXISTS `capacity`;
 CREATE TABLE IF NOT EXISTS `capacity` (
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `hero` (
   `name` varchar(25) NOT NULL,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL,
-  `img` varchar(255) NOT NULL,
+  `sprites` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
@@ -202,14 +202,13 @@ CREATE TABLE IF NOT EXISTS `hero` (
 -- Déchargement des données de la table `hero`
 --
 
-INSERT INTO `hero` (`id`, `name`, `created_at`, `updated_at`, `img`) VALUES
-(3, 'Luigi', '2019-11-07', '2019-11-15', 'assets/img/heroes/Luigi.png'),
-(4, 'PacMan', '2019-11-07', '2019-11-21', 'assets/img/heroes/PacMan.png'),
-(5, 'Peach', '2019-11-15', '2019-11-09', 'assets/img/heroes/Peach.png'),
-(6, 'Pikachu', '2019-11-14', '2019-11-21', 'assets/img/heroes/Pikachu.png'),
-(7, 'Plant', '2019-11-07', '2019-11-15', 'assets/img/heroes/Plant.png'),
-(8, 'Sonic', '2019-11-21', '2019-11-06', 'assets/img/heroes/Sonic.png'),
-(9, 'Squirtle', '2019-11-14', '2019-11-14', 'assets/img/heroes/Squirtle.png');
+INSERT INTO `hero` (`id`, `name`, `created_at`, `updated_at`, `sprites`) VALUES
+(1, 'Warrior', '2019-11-07', '2019-11-15', '{"Idle":17}'),
+(2, 'Mage', '2019-11-07', '2019-11-15', '{"Idle":17}'),
+(3, 'Ninja', '2019-11-07', '2019-11-15', '{"Idle":17}'),
+(4, 'Pirate', '2019-11-07', '2019-11-15', '{"Idle":17}'),
+(5, 'Satyr', '2019-11-07', '2019-11-15', '{"Idle":17}'),
+(6, 'King', '2019-11-07', '2019-11-15', '{"Idle":17}');
 
 -- --------------------------------------------------------
 
@@ -237,10 +236,10 @@ CREATE TABLE IF NOT EXISTS `monster` (
 --
 
 INSERT INTO `monster` (`id`, `name`, `hp`, `background`, `speed`, `time_min`, `time_max`, `created_at`, `updated_at`, `sprites`) VALUES
-(1, 'Koopa Troopa', 100, '1', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{"width":40,"height":40,"moving":{"y":0,"xMin":2,"xMax":3},"attacking":{"y":0,"xMin":1,"xMax":1}}'),
-(2, 'Super Koopa', 200, '2', 1, 1000, 5000, '2019-11-07', '2019-11-07', '{"width":40,"height":40,"moving":{"y":1,"xMin":8,"xMax":9},"attacking":{"y":0,"xMin":8,"xMax":10}}'),
-(3, 'Galoomba', 300, '3', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{"width":40,"height":39,"moving":{"y":9,"xMin":0,"xMax":1},"attacking":{"y":10,"xMin":0,"xMax":1}}'),
-(4, 'Boo', 400, '4', 1, 1000, 5000, '2019-11-07', '2019-11-21', '{"width":25,"height":40,"moving":{"y":20,"xMin":0,"xMax":1},"attacking":{"y":20,"xMin":2,"xMax":3}}');
+(1, 'Big Bob', 100, '1', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{"Walk":{"start":0,"end":39},"Idle":{"start":40,"end":59},"Attack":{"start":60,"end":119},"GetHit":{"start":120,"end":139},"Death":{"start":140,"end":199},"total":199,"paddingBottom":68.87}'),
+(2, 'Snail Rider', 200, '2', 1, 1000, 5000, '2019-11-07', '2019-11-07', '{"Walk":{"start":0,"end":19},"Idle":{"start":20,"end":39},"Attack":{"start":40,"end":59},"GetHit":{"start":60,"end":79},"Death":{"start":80,"end":109},"total":109,"paddingBottom":100}'),
+(3, 'Sorceror', 300, '3', 1, 1000, 5000, '2019-11-06', '2019-11-14', '{"Walk":{"start":0,"end":39},"Idle":{"start":40,"end":59},"Attack":{"start":60,"end":109},"GetHit":{"start":110,"end":129},"Death":{"start":130,"end":164},"total":164,"paddingBottom":100}'),
+(4, 'Specter', 400, '4', 1, 1000, 5000, '2019-11-07', '2019-11-21', '{"Walk":{"start":0,"end":19},"Idle":{"start":20,"end":39},"Attack":{"start":40,"end":74},"GetHit":{"start":75,"end":94},"Death":{"start":95,"end":133},"total":133,"paddingBottom":100}');
 
 -- --------------------------------------------------------
 

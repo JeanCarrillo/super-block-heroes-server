@@ -9,7 +9,7 @@ export class Hero {
   name: string;
 
   @Column({ length: 255 })
-  img: string;
+  sprites: string;
 
   @Column('date')
   created_at: Date;
