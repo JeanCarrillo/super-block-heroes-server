@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 -- Structure de la table `capacity`
 --
 
--- DROP DATABASE IF EXISTS sbheroes;
--- CREATE DATABASE sbheroes;
--- USE sbheroes;
+DROP DATABASE IF EXISTS sbheroes;
+CREATE DATABASE sbheroes;
+USE sbheroes;
 
 DROP TABLE IF EXISTS `capacity`;
 CREATE TABLE IF NOT EXISTS `capacity` (
