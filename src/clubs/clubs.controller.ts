@@ -7,7 +7,7 @@ import {
   Delete,
   Param,
 } from '@nestjs/common';
-import { ClubsService } from './Clubs.service';
+import { ClubsService } from './clubs.service';
 import { Club } from './clubs-entity';
 
 @Controller('Clubs')
