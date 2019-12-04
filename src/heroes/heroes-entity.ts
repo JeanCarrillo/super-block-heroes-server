@@ -11,9 +11,9 @@ export class Hero {
   @Column({ length: 255 })
   sprites: string;
 
-  @Column('date')
-  created_at: Date;
+  // @Column('date')
+  // created_at: Date;
 
-  @Column('date')
-  updated_at: Date;
+  // @Column('date')
+  // updated_at: Date;
 }

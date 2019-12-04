@@ -253,11 +253,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(25) NOT NULL,
   `nickname` varchar(25) NOT NULL,
   `password` varchar(25) NOT NULL,
-  `gold` int(11) NOT NULL,
+  `gold` int(11) DEFAULT 0,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL,
   `clubId` int(11) DEFAULT NULL,
-  `heroId` int(11) DEFAULT NULL,
+  `heroId` int(11) DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `FK_9bf449f75aa016d6fcf8230f159` (`clubId`),
   KEY `FK_2b13150f04ffbf3a6e4f3a59525` (`heroId`)

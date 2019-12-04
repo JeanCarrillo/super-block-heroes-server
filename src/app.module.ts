@@ -10,8 +10,6 @@ import { CapacityModule } from './capacities/capacities.module';
 import { GameModule } from './games/games.module';
 import { FriendsModule } from './friends/friends.module';
 import { Connection } from 'typeorm';
-// import { JwtStrategy } from './auth/JWTStrategy';
-// import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 
 @Module({

@@ -1,14 +1,14 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class databaseSchema1575470544283 implements MigrationInterface {
-    name = 'databaseSchema1575470544283'
+export class INITIALDB1575491118778 implements MigrationInterface {
+    name = 'INITIALDB1575491118778'
 
     public async up(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.query("CREATE TABLE `hero` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `sprites` varchar(255) NOT NULL, `created_at` date NOT NULL, `updated_at` date NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
-        await queryRunner.query("CREATE TABLE `monster` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `hp` int NOT NULL, `background` varchar(25) NOT NULL, `speed` int NOT NULL, `sprites` varchar(225) NOT NULL, `time_min` int NOT NULL, `time_max` int NOT NULL, `created_at` date NOT NULL, `updated_at` date NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
-        await queryRunner.query("CREATE TABLE `capacity` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `description` varchar(255) NOT NULL, `cooldown` int NOT NULL, `duration` int NOT NULL, `created_at` date NOT NULL, `updated_at` date NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
-        await queryRunner.query("CREATE TABLE `club` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `score_team` int NOT NULL, `created_at` date NOT NULL, `updated_at` date NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
-        await queryRunner.query("CREATE TABLE `user` (`id` int NOT NULL AUTO_INCREMENT, `email` varchar(25) NOT NULL DEFAULT '', `nickname` varchar(25) NOT NULL, `password` varchar(25) NOT NULL DEFAULT '', `gold` int NOT NULL DEFAULT 0, `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `clubId` int NULL, `heroId` int NULL, UNIQUE INDEX `IDX_e2364281027b926b879fa2fa1e` (`nickname`), PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
+        await queryRunner.query("CREATE TABLE `hero` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `sprites` varchar(255) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
+        await queryRunner.query("CREATE TABLE `monster` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `hp` int NOT NULL, `background` varchar(25) NOT NULL, `speed` int NOT NULL, `sprites` varchar(225) NOT NULL, `time_min` int NOT NULL, `time_max` int NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
+        await queryRunner.query("CREATE TABLE `capacity` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `description` varchar(255) NOT NULL, `cooldown` int NOT NULL, `duration` int NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
+        await queryRunner.query("CREATE TABLE `club` (`id` int NOT NULL AUTO_INCREMENT, `name` varchar(25) NOT NULL, `score_team` int NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
+        await queryRunner.query("CREATE TABLE `user` (`id` int NOT NULL AUTO_INCREMENT, `email` varchar(25) NOT NULL, `nickname` varchar(25) NOT NULL, `password` varchar(255) NOT NULL, `gold` int NOT NULL DEFAULT 0, `clubId` int NULL, `heroId` int NULL, UNIQUE INDEX `IDX_e2364281027b926b879fa2fa1e` (`nickname`), PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `friend_relation` (`id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `game` (`id` int NOT NULL AUTO_INCREMENT, `level` int NOT NULL, `created_at` date NOT NULL, `updated_at` date NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB", undefined);
         await queryRunner.query("CREATE TABLE `capacity_heroes_hero` (`capacityId` int NOT NULL, `heroId` int NOT NULL, INDEX `IDX_465b7b9970dde2c82d49506198` (`capacityId`), INDEX `IDX_5493d58ff7a9cd910ddc51a768` (`heroId`), PRIMARY KEY (`capacityId`, `heroId`)) ENGINE=InnoDB", undefined);

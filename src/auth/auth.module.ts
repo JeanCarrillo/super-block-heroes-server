@@ -5,14 +5,16 @@ import { UsersService } from '../users/users.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { secretKey } from '../constants';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User]),
+  imports: [
+    TypeOrmModule.forFeature([User]),
     JwtModule.register({
-        secretOrPrivateKey: 'secret12356789'
-    })
-    ],
-    controllers: [AuthController],
-    providers: [UsersService, AuthService]
+      secretOrPrivateKey: secretKey,
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [UsersService, AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

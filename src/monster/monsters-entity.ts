@@ -26,9 +26,9 @@ export class Monster {
   @Column()
   time_max: number;
 
-  @Column('date')
-  created_at: Date;
+  // @Column('date')
+  // created_at: Date;
 
-  @Column('date')
-  updated_at: Date;
+  // @Column('date')
+  // updated_at: Date;
 }

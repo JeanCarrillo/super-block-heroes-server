@@ -33,9 +33,9 @@ export class Capacity {
   @Column()
   duration: number | null;
 
-  @Column('date')
-  created_at: Date;
+  // @Column('date')
+  // created_at: Date;
 
-  @Column('date')
-  updated_at: Date;
+  // @Column('date')
+  // updated_at: Date;
 }

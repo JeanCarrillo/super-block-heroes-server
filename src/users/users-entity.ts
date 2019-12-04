@@ -3,28 +3,29 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
+  // CreateDateColumn,
+  // UpdateDateColumn,
+  BeforeInsert,
 } from 'typeorm';
 import { Club } from '../clubs/clubs-entity';
 import { Hero } from '../heroes/heroes-entity';
-
+import * as crypto from 'crypto';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 25, unique: false, default: '' })
+  @Column({ type: 'varchar', length: 25, unique: false })
   email: string;
 
-  @Column({ length: 25, unique: true })
+  @Column({ type: 'varchar', length: 25, unique: true })
   nickname: string;
 
-  @Column()
+  @Column({ type: 'varchar', nullable: false })
   password: string;
 
-  @Column({ default: 0 })
+  @Column({ type: 'int', default: 0 })
   gold: number;
 
   // @Column({ default: null, nullable: true })
@@ -36,9 +37,24 @@ export class User {
   @ManyToOne(type => Hero)
   hero: Hero;
 
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await crypto
+      .createHmac('sha256', this.password)
+      .digest('hex');
+  }
 }
+
+// @CreateDateColumn({
+//   name: 'created_at',
+//   default: () => `now()`,
+//   nullable: false,
+// })
+// createdAt: Date;
+
+// @UpdateDateColumn({
+//   name: 'updated_at',
+//   default: () => `now()`,
+//   nullable: false,
+// })
+// updatedAt: Date;
