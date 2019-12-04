@@ -9,7 +9,27 @@ Stack:
 
 ## Contributors
 
-- Léo - [LeopoldAssogbaA](https://github.com/LeopoldAssogbaA)
-- Virgile - [VirgileLyon](https://github.com/VirgileLyon)
-- Catherine - [c4th-code](https://github.com/c4th-code)
-- Jean - [JeanCarrillo](https://github.com/JeanCarrillo)
+- Léo           [LeopoldAssogbaA](https://github.com/LeopoldAssogbaA)
+- Virgile       [VirgileLyon](https://github.com/VirgileLyon)
+- Catherine     [c4th-code](https://github.com/c4th-code)
+- Jean          [JeanCarrillo](https://github.com/JeanCarrillo)
+
+### Ormconfig.json File example
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "",
+    "entities": ["dist/**/*-entity{.ts,.js}"],
+    "migrations": ["dist/migration/*.js"],
+    "cli": {
+        "migrationsDir": "migration"
+    }
+}
+
+TypeORM-CLI commands :
+- Generate an empty migration file :    typeorm migration:create -n fileName
+- Generate a 'real' migration file :    typeorm migration:generate -n fileName
+- Apply the migration file :            typeorm migration:run

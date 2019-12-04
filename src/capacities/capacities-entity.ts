@@ -25,7 +25,13 @@ export class Capacity {
   name: string;
 
   @Column()
-  power: string;
+  description: string;
+
+  @Column()
+  cooldown: number;
+
+  @Column()
+  duration: number | null;
 
   @Column('date')
   created_at: Date;
