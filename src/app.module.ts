@@ -19,6 +19,9 @@ import { Capacity } from './capacities/capacities-entity';
 import { Game } from './games/games-entity';
 import { FriendRelation } from './friends/friends-entity';
 import { Connection } from 'typeorm';
+// import { JwtStrategy } from './auth/JWTStrategy';
+// import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -39,6 +42,7 @@ import { Connection } from 'typeorm';
     CapacityModule,
     GameModule,
     FriendsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

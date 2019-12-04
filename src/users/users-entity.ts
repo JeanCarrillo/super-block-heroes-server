@@ -9,6 +9,7 @@ import {
 import { Club } from '../clubs/clubs-entity';
 import { Hero } from '../heroes/heroes-entity';
 
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -20,7 +21,7 @@ export class User {
   @Column({ length: 25, unique: true })
   nickname: string;
 
-  @Column({ length: 25, default: '' })
+  @Column()
   password: string;
 
   @Column({ default: 0 })
@@ -30,7 +31,8 @@ export class User {
   @ManyToOne(type => Club)
   club: Club;
 
-  // @Column({ default: 3, nullable: false })
+  // @Column({ default: 1, nullable: false })
+  // TODO: ajouter la valeur par défaut d'un héro
   @ManyToOne(type => Hero)
   hero: Hero;
 

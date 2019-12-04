@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult, DeleteResult } from 'typeorm';
+import { Repository, UpdateResult, DeleteResult, EntityManager } from 'typeorm';
 import { User } from './users-entity';
 
 @Injectable()
@@ -21,10 +21,12 @@ export class UsersService {
     });
   }
 
-  async getUserByNickname(nickname): Promise<User> {
+  async getUserByEmail(email): Promise<User> {
+
+    console.log('getUserByEmail():', email);
     return await this.usersRepository.findOne({
-      where: { nickname },
-      select: ['id', 'nickname', 'email', 'gold', 'hero'],
+      where: { email },
+      select: ['id', 'nickname', 'email', 'gold', 'hero', 'password'],
       relations: ['hero'],
     });
   }

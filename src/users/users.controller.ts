@@ -30,7 +30,7 @@ export class UsersController {
 
   @Get('nickname/:nickname')
   async find(@Param() params, @Res() response) {
-    const user = await this.service.getUserByNickname(params.nickname);
+    const user = await this.service.getUserByEmail(params.nickname);
 
     if (user === undefined) {
       response.sendStatus(404);
@@ -41,15 +41,15 @@ export class UsersController {
 
   @Post()
   create(@Body() user: User): Promise<any> {
-    return this.service.getUserByNickname(user.nickname).then(res => {
+    return this.service.getUserByEmail(user.nickname).then(res => {
       console.log('USERS CONTROLLER');
       console.log(res);
       if (res === undefined) {
         return this.service.createUser(user).then(createdUser => {
-          return this.service.getUserByNickname(createdUser.nickname);
+          return this.service.getUserByEmail(createdUser.nickname);
         });
       }
-      return this.service.getUserByNickname(user.nickname);
+      return this.service.getUserByEmail(user.nickname);
     });
   }
 
