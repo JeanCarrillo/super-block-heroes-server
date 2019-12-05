@@ -26,13 +26,24 @@ export class UsersController {
   }
 
   @Get(':id')
-  findByNickname(@Param() params): Promise<User> {
+  findById(@Param() params): Promise<User> {
     return this.service.getUser(params.id);
   }
 
   @Get('nickname/:nickname')
-  async find(@Param() params, @Res() response) {
+  async findByNickname(@Param() params, @Res() response) {
     const user = await this.service.getUserByNickname(params.nickname);
+
+    if (user === undefined) {
+      response.sendStatus(404);
+    }
+
+    response.json(user);
+  }
+
+  @Get('email/:email')
+  async findByEmail(@Param() params, @Res() response) {
+    const user = await this.service.getUserByEmail(params.email);
 
     if (user === undefined) {
       response.sendStatus(404);
