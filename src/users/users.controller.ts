@@ -10,9 +10,11 @@ import {
   HttpException,
   HttpStatus,
   Catch,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './users-entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -30,7 +32,7 @@ export class UsersController {
 
   @Get('nickname/:nickname')
   async find(@Param() params, @Res() response) {
-    const user = await this.service.getUserByEmail(params.nickname);
+    const user = await this.service.getUserByNickname(params.nickname);
 
     if (user === undefined) {
       response.sendStatus(404);
@@ -53,6 +55,7 @@ export class UsersController {
     });
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   update(@Param('id') id, @Body() user: User): Promise<User> {
     user.id = Number(id);

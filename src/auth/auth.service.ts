@@ -26,15 +26,9 @@ export class AuthService {
   }
 
   public async login(user: User): Promise<any | { status: number }> {
-    return this.validate(user).then(userData => {
-      // console.log(
-      //   'PostPassword',
-      //   user.password,
-      //   'userPasswordHashed',
-      //   crypto.createHmac('sha256', user.password).digest('hex'),
-      // );
-      // console.log({ userData });
-
+    return this.usersService.getUserByEmail(user.email).then(userData => {
+      console.log({ user });
+      console.log({ userData });
       if (
         !userData ||
         userData.password !==
@@ -42,19 +36,17 @@ export class AuthService {
       ) {
         return { status: 404 };
       }
-      const payload = `${userData.id}`;
-      const accessToken = this.jwtService.sign(payload);
-
+      const payload = { email: userData.email };
       return {
-        expires_in: 3600,
-        access_token: accessToken,
-        user_id: payload,
-        status: 200,
+        access_token: this.jwtService.sign(payload),
       };
     });
   }
 
   public async register(user: User): Promise<any> {
-    return await this.usersService.createUser(user);
+    // user.password = crypto.createHmac('sha256', user.password).digest('hex');
+    return await this.usersService.createUser(user).then(async createdUser => {
+      return await this.usersService.getUserByEmail(createdUser.email);
+    });
   }
 }

@@ -5,11 +5,11 @@ import {
   ManyToOne,
   // CreateDateColumn,
   // UpdateDateColumn,
-  BeforeInsert,
+  // BeforeInsert,
 } from 'typeorm';
 import { Club } from '../clubs/clubs-entity';
 import { Hero } from '../heroes/heroes-entity';
-import * as crypto from 'crypto';
+// import * as crypto from 'crypto';
 
 @Entity()
 export class User {
@@ -36,13 +36,6 @@ export class User {
   // TODO: ajouter la valeur par défaut d'un héro
   @ManyToOne(type => Hero)
   hero: Hero;
-
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await crypto
-      .createHmac('sha256', this.password)
-      .digest('hex');
-  }
 }
 
 // @CreateDateColumn({

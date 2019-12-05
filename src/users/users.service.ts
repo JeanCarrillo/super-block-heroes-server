@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult, DeleteResult, EntityManager } from 'typeorm';
 import { User } from './users-entity';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -21,9 +22,15 @@ export class UsersService {
     });
   }
 
-  async getUserByEmail(email): Promise<User> {
+  async getUserByNickname(nickname: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { nickname },
+      select: ['id', 'nickname', 'email', 'gold', 'hero', 'password'],
+      relations: ['hero'],
+    });
+  }
 
-    console.log('getUserByEmail():', email);
+  async getUserByEmail(email): Promise<User> {
     return await this.usersRepository.findOne({
       where: { email },
       select: ['id', 'nickname', 'email', 'gold', 'hero', 'password'],
@@ -32,9 +39,10 @@ export class UsersService {
   }
 
   async createUser(user: User): Promise<User> {
-    console.log('USERS SERVICE');
-    console.log(user);
-    return await this.usersRepository.save(user);
+    return await this.usersRepository.save({
+      ...user,
+      password: crypto.createHmac('sha256', user.password).digest('hex'),
+    });
   }
 
   async updateUser(user: User): Promise<UpdateResult> {
