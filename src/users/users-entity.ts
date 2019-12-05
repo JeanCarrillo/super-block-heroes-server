@@ -28,6 +28,15 @@ export class User {
   @Column({ type: 'int', default: 0 })
   gold: number;
 
+  @Column({ length: 255, default: '{"heroes":[1]}' })
+  inventory: string;
+
+  @Column({ type: 'int', default: 0 })
+  games_played: number;
+
+  @Column({ type: 'int', default: 0 })
+  highscore: number;
+
   // @Column({ default: null, nullable: true })
   @ManyToOne(type => Club)
   club: Club;

@@ -29,6 +29,8 @@ export class AuthService {
     return this.usersService.getUserByEmail(user.email).then(userData => {
       console.log({ user });
       console.log({ userData });
+      console.log(user.password);
+      console.log(userData.password);
       if (
         !userData ||
         userData.password !==

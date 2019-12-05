@@ -9,14 +9,14 @@ import { Capacity } from 'src/capacities/capacities-entity';
 
 @Entity()
 export class Hero {
-  @PrimaryGeneratedColumn({
-    type: 'int',
-    name: 'id',
-  })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 25 })
   name: string;
+
+  @Column({ type: 'int' })
+  price: number;
 
   @Column({ length: 255 })
   sprites: string;
