@@ -34,7 +34,6 @@ TypeORM-CLI commands :
 - Generate a 'real' migration file :    typeorm migration:generate -n fileName
 - Apply the migration file :            typeorm migration:run
 
-
 How to run the app :
 - drop the database if exists
 - create the database
