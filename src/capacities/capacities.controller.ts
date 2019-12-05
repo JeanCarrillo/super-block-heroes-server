@@ -14,6 +14,11 @@ import { Capacity } from './capacities-entity';
 export class CapacitiesController {
   constructor(private service: CapacitiesService) {}
 
+  @Get()
+  index(): Promise<Capacity[]> {
+    return this.service.getCapacities();
+  }
+
   @Get(':id')
   get(@Param() params) {
     return this.service.getCapacity(params.id);

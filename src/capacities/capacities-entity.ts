@@ -2,24 +2,27 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
+  // ManyToMany,
+  // JoinTable,
 } from 'typeorm';
-import { Hero } from 'src/heroes/heroes-entity';
-import { Monster } from 'src/monster/monsters-entity';
+// import { Hero } from 'src/heroes/heroes-entity';
+// import { Monster } from 'src/monster/monsters-entity';
 
 @Entity()
 export class Capacity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'int',
+    name: 'id',
+  })
   id: number;
 
-  @ManyToMany(type => Hero)
-  @JoinTable()
-  heroes: Hero[];
+  // @ManyToMany(type => Hero)
+  // @JoinTable()
+  // heroes: Hero[];
 
-  @ManyToMany(type => Monster)
-  @JoinTable()
-  monsters: Monster[];
+  // @ManyToMany(type => Monster)
+  // @JoinTable()
+  // monsters: Monster[];
 
   @Column({ length: 25 })
   name: string;

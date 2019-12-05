@@ -55,6 +55,6 @@ export class AuthService {
   }
 
   public async register(user: User): Promise<any> {
-    return this.usersService.createUser(user);
+    return await this.usersService.createUser(user);
   }
 }

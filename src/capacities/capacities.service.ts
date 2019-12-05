@@ -10,7 +10,7 @@ export class CapacitiesService {
     private CapacitiesRepository: Repository<Capacity>,
   ) {}
 
-  async getCapacities(capacity: Capacity): Promise<Capacity[]> {
+  async getCapacities(): Promise<Capacity[]> {
     return await this.CapacitiesRepository.find();
   }
 
