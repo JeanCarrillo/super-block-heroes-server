@@ -41,15 +41,15 @@ export class UsersController {
 
   @Post()
   create(@Body() user: User): Promise<any> {
-    return this.service.getUserByEmail(user.nickname).then(res => {
+    return this.service.getUserByEmail(user.email).then(res => {
       console.log('USERS CONTROLLER');
       console.log(res);
       if (res === undefined) {
         return this.service.createUser(user).then(createdUser => {
-          return this.service.getUserByEmail(createdUser.nickname);
+          return this.service.getUserByEmail(createdUser.email);
         });
       }
-      return this.service.getUserByEmail(user.nickname);
+      return this.service.getUserByEmail(user.email);
     });
   }
 
