@@ -10,10 +10,7 @@ import {
 
 @Entity()
 export class Capacity {
-  @PrimaryGeneratedColumn({
-    type: 'int',
-    name: 'id',
-  })
+  @PrimaryGeneratedColumn()
   id: number;
 
   // @ManyToMany(type => Hero)

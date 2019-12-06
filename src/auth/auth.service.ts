@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
   //  async validate(email: string): Promise<any> {
   //    return this.usersService.getUserByEmail(email);
   //  }
@@ -26,44 +26,57 @@ export class AuthService {
   }
 
   public async login(user: User): Promise<any | { status: number }> {
-
-    if (user.nickname !== null) {
+    console.log({ user });
+    if (user.nickname !== '') {
       console.log('nickname');
-      return this.usersService.getUserByNickname(user.nickname).then(userData => {
-        if (
-          !userData ||
-          crypto.createHmac('sha256', userData.password).digest('hex') !==
-          crypto.createHmac('sha256', user.password).digest('hex')
-        ) {
-          return { status: 404 };
-        }
-        const payload = { email: userData.email };
-        return {
-          access_token: this.jwtService.sign(payload),
-        };
-      });
-    } else if (user.email !== null) {
-      return this.usersService.getUserByEmail(user.email).then(userData => {
-        if (
-          !userData ||
-          crypto.createHmac('sha256', userData.password).digest('hex') !==
-          crypto.createHmac('sha256', user.password).digest('hex')
-        ) {
-          console.log('email');
-          return { status: 404 };
-        }
-        const payload = { email: userData.email };
-        return {
-          access_token: this.jwtService.sign(payload),
-        };
-      });
-    } else { 
+      return this.usersService
+        .getCredentialsWithNickname(user.nickname)
+        .then(userData => {
+          if (
+            !userData ||
+            userData.password !==
+              crypto.createHmac('sha256', user.password).digest('hex')
+          ) {
+            return { status: 404 };
+          }
+          const payload = {
+            id: userData.id,
+            email: userData.email,
+            nickname: userData.nickname,
+          };
+          return {
+            access_token: this.jwtService.sign(payload),
+          };
+        });
+    } else if (user.email !== '') {
+      console.log('email');
+      return this.usersService
+        .getCredentialsWithEmail(user.email)
+        .then(userData => {
+          console.log({ userData });
+          if (
+            !userData ||
+            userData.password !==
+              crypto.createHmac('sha256', user.password).digest('hex')
+          ) {
+            console.log('pw failed');
+            return { status: 404 };
+          }
+          const payload = {
+            id: userData.id,
+            email: userData.email,
+            nickname: userData.nickname,
+          };
+          return {
+            access_token: this.jwtService.sign(payload),
+          };
+        });
+    } else {
       return { status: 404 };
     }
   }
 
   public async register(user: User): Promise<any> {
-    // user.password = crypto.createHmac('sha256', user.password).digest('hex');
     return await this.usersService.createUser(user).then(async createdUser => {
       return await this.usersService.getUserByEmail(createdUser.email);
     });

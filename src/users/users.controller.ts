@@ -71,6 +71,8 @@ export class UsersController {
   update(@Param('id') id, @Body() user: User): Promise<User> {
     user.id = Number(id);
     console.log('Update #' + user.id);
+    console.log({ user });
+
     return this.service.updateUser(user).then(() => {
       return this.service.getUser(user.id);
     });
