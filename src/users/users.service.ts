@@ -48,9 +48,33 @@ export class UsersService {
     });
   }
 
-  async getUserByEmail(email): Promise<User> {
+  async getUserByEmail(email: string): Promise<User> {
     return await this.usersRepository.findOne({
       where: { email },
+      select: [
+        'id',
+        'nickname',
+        'email',
+        'gold',
+        'hero',
+        'highscore',
+        'games_played',
+        'inventory',
+      ],
+      relations: ['hero'],
+    });
+  }
+
+  async getCredentialsWithEmail(email: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { email },
+      select: ['id', 'nickname', 'email', 'password'],
+    });
+  }
+
+  async getCredentialsWithNickname(nickname: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { nickname },
       select: ['id', 'nickname', 'email', 'password'],
     });
   }

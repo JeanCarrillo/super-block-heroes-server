@@ -26,27 +26,57 @@ export class AuthService {
   }
 
   public async login(user: User): Promise<any | { status: number }> {
-    return this.usersService.getUserByEmail(user.email).then(userData => {
-      console.log({ user });
-      console.log({ userData });
-      console.log(user.password);
-      console.log(userData.password);
-      if (
-        !userData ||
-        userData.password !==
-          crypto.createHmac('sha256', user.password).digest('hex')
-      ) {
-        return { status: 404 };
-      }
-      const payload = { email: userData.email };
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
-    });
+    console.log({ user });
+    if (user.nickname !== '') {
+      console.log('nickname');
+      return this.usersService
+        .getCredentialsWithNickname(user.nickname)
+        .then(userData => {
+          if (
+            !userData ||
+            userData.password !==
+              crypto.createHmac('sha256', user.password).digest('hex')
+          ) {
+            return { status: 404 };
+          }
+          const payload = {
+            id: userData.id,
+            email: userData.email,
+            nickname: userData.nickname,
+          };
+          return {
+            access_token: this.jwtService.sign(payload),
+          };
+        });
+    } else if (user.email !== '') {
+      console.log('email');
+      return this.usersService
+        .getCredentialsWithEmail(user.email)
+        .then(userData => {
+          console.log({ userData });
+          if (
+            !userData ||
+            userData.password !==
+              crypto.createHmac('sha256', user.password).digest('hex')
+          ) {
+            console.log('pw failed');
+            return { status: 404 };
+          }
+          const payload = {
+            id: userData.id,
+            email: userData.email,
+            nickname: userData.nickname,
+          };
+          return {
+            access_token: this.jwtService.sign(payload),
+          };
+        });
+    } else {
+      return { status: 404 };
+    }
   }
 
   public async register(user: User): Promise<any> {
-    // user.password = crypto.createHmac('sha256', user.password).digest('hex');
     return await this.usersService.createUser(user).then(async createdUser => {
       return await this.usersService.getUserByEmail(createdUser.email);
     });
