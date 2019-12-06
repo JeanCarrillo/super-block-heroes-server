@@ -33,3 +33,11 @@ TypeORM-CLI commands :
 - Generate an empty migration file :    typeorm migration:create -n fileName
 - Generate a 'real' migration file :    typeorm migration:generate -n fileName
 - Apply the migration file :            typeorm migration:run
+
+How to run the app :
+- drop the database if exists
+- create the database
+- delete dist directory if exists
+- run server with command : npm run
+- run the migration files with command  : typeorm migration:run
+- run server again with command : npm run start:dev
