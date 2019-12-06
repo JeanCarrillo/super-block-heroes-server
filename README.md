@@ -14,7 +14,19 @@ Stack:
 - Catherine     [c4th-code](https://github.com/c4th-code)
 - Jean          [JeanCarrillo](https://github.com/JeanCarrillo)
 
-### Ormconfig.json File example
+
+## How to run the app
+
+- Clone back & front repositories on github
+- Delete dist directory in server if exists
+- Create the ormconfig.json file (example below)
+- Drop the MySql database if exists
+- Create the database
+- Run server in terminal : npm run
+- Run the migration files in another terminal  : typeorm migration:run
+- Kill and run server again in first terminal : npm run start:dev
+
+#### Ormconfig.json File example
 {
     "type": "mysql",
     "host": "localhost",
@@ -29,15 +41,8 @@ Stack:
     }
 }
 
-TypeORM-CLI commands :
+#### TypeORM-CLI commands
+
 - Generate an empty migration file :    typeorm migration:create -n fileName
 - Generate a 'real' migration file :    typeorm migration:generate -n fileName
 - Apply the migration file :            typeorm migration:run
-
-How to run the app :
-- drop the database if exists
-- create the database
-- delete dist directory if exists
-- run server with command : npm run
-- run the migration files with command  : typeorm migration:run
-- run server again with command : npm run start:dev
