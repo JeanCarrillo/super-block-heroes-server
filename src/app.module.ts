@@ -11,6 +11,7 @@ import { GameModule } from './games/games.module';
 import { FriendsModule } from './friends/friends.module';
 import { Connection } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
+import { GameGateway } from './socket/game.gateway';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GameGateway],
 })
 export class AppModule {
   constructor(private readonly connection: Connection) {}
