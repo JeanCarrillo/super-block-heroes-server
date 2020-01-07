@@ -36,7 +36,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private getPlayerIndex(playerId: string): number {
-    console.log({ playerId });
     return this.rooms[0].players.findIndex(
       player => player.socketId === playerId,
     );
