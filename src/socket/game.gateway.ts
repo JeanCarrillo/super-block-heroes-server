@@ -18,7 +18,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     {
       players: [],
       messages: [],
-      game: {},
+      game: {
+        players: [],
+        monster: {},
+        victory: false,
+        defeat: false,
+      },
       started: false,
     },
   ];
@@ -29,8 +34,16 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: any) {
     console.log('a user disconnected: ' + client.id);
-    const playerIndex = this.getPlayerIndex(client.id);
-    this.rooms[0].players.splice(playerIndex, 1);
+    for (const player of this.rooms[0].players) {
+      const playerIndex = this.getPlayerIndex(client.id);
+      if (playerIndex !== -1) {
+        this.rooms[0].players.splice(playerIndex, 1);
+        this.rooms[0].game.players.splice(playerIndex, 1);
+      }
+    }
+    if (!this.rooms[0].players.length) {
+      this.rooms[0].started = false;
+    }
     console.log('rooms', this.rooms);
     this.emitRoom();
   }
@@ -41,29 +54,21 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     );
   }
 
-  // private createRoom(client: any): void {
-  //   this.rooms[client.id] = {
-  //     players: [client.id],
-  //   };
-  // }
-
-  // private deleteRoom(hostId: string): void {
-  //   delete this.rooms[hostId];
-  // }
-
-  // private joinRoom(roomId: string, client: any): void {
-  //   this.rooms[roomId].players.push(client.id);
-  // }
-
-  // private leaveRoom(roomId: string, client: any): void {
-  //   const playerIndex = this.rooms[roomId].indexOf(client.id);
-  //   this.rooms[roomId].splice(playerIndex, 1);
-  // }
-
   private emitRoom() {
     this.server.emit('room', this.rooms[0]);
     console.log(this.rooms[0]);
   }
+
+  private emitGame() {
+    this.server.emit('game', this.rooms[0].game);
+  }
+
+  // private emitPlayer(data: any) {
+  //   this.server.emit('player', {
+  //     index: playerIndex,
+  //     data: this.rooms[0].players[playerIndex],
+  //   });
+  // }
 
   @SubscribeMessage('join')
   handleJoin(
@@ -94,6 +99,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       delete user.password;
     }
     this.rooms[0].players.push(user);
+    this.rooms[0].game.players.push({});
     this.emitRoom();
   }
 
@@ -102,14 +108,30 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() message: string,
     @ConnectedSocket() client: Socket,
   ): void {
-    console.log({ message });
     const playerIndex = this.getPlayerIndex(client.id);
-    console.log({ playerIndex });
     this.rooms[0].messages.push({
       text: message,
       author: this.rooms[0].players[playerIndex].nickname,
     });
     this.emitRoom();
     // this.server.emit('messages', this.rooms[0].messages);
+  }
+
+  @SubscribeMessage('start')
+  handleStart(): void {
+    this.rooms[0].started = true;
+    this.emitRoom();
+    // this.server.emit('messages', this.rooms[0].messages);
+  }
+
+  @SubscribeMessage('gameEvent')
+  handleGameEvent(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ): void {
+    console.log({ data });
+    this.rooms[0].game.players[data.playerIndex][data.eventType] =
+      data[data.eventType];
+    client.broadcast.emit('gameEvent', data);
   }
 }
