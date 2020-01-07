@@ -18,9 +18,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     {
       players: [],
       messages: [],
+      monster: {},
       game: {
         players: [],
-        monster: {},
         victory: false,
         defeat: false,
       },
@@ -118,20 +118,25 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('start')
-  handleStart(): void {
+  handleStart(@MessageBody() monster: any): void {
     this.rooms[0].started = true;
+    this.rooms[0].monster = monster;
     this.emitRoom();
     // this.server.emit('messages', this.rooms[0].messages);
   }
 
   @SubscribeMessage('gameEvent')
   handleGameEvent(
-    @MessageBody() data: any,
+    @MessageBody() event: any,
     @ConnectedSocket() client: Socket,
   ): void {
-    console.log({ data });
-    this.rooms[0].game.players[data.playerIndex][data.eventType] =
-      data[data.eventType];
-    client.broadcast.emit('gameEvent', data);
+    console.log({ event });
+    this.rooms[0].game.players[event.playerIndex][event.eventType] =
+      event[event.eventType];
+    if (event.eventType === 'useCapacity') {
+      this.server.emit('gameEvent', event);
+    } else {
+      client.broadcast.emit('gameEvent', event);
+    }
   }
 }
