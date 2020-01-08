@@ -34,6 +34,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (!roomId) {
       return;
     }
+    console.log({ roomId });
     // tslint:disable-next-line: prefer-for-of
     const playerIndex = this.getPlayerIndex(client.id, roomId);
     if (playerIndex !== -1) {
@@ -68,9 +69,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     let roomId;
     while (!created) {
       if (!this.rooms[counter]) {
+        console.log('create room');
+        console.log(this.rooms);
+        console.log({ counter });
         this.rooms[counter] = RoomModel;
         roomId = counter.toString();
         created = true;
+        break;
       } else {
         counter += 1;
       }
@@ -83,6 +88,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() user: any,
     @ConnectedSocket() client: Socket,
   ): void {
+    const currentRoomId = this.playersRoomsIds[client.id];
+    if (currentRoomId) {
+      // console.log(this.rooms[currentRoomId]);
+      // delete this.playersRoomsIds[client.id];
+      return;
+    }
     // Add socket id before storing user object
     user.socketId = client.id;
     // Clear confidential data if any
@@ -92,10 +103,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     let roomIdToJoin = null;
 
     // If no room, create one
-    if (!roomsKeys.length) {
+    if (roomsKeys.length === 0) {
       this.createRoom();
       roomsKeys = Object.keys(this.rooms);
     }
+    console.log({ roomsKeys });
 
     // Look in all rooms until it finds a room with less than 4 players where the game isn't started yet
     // tslint:disable-next-line: prefer-for-of
