@@ -31,17 +31,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleDisconnect(client: any) {
     console.log('a user disconnected: ' + client.id);
     const roomId = this.playersRoomsIds[client.id];
-    console.log({ roomId });
     if (!roomId) {
       return;
     }
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.rooms[roomId].players.length; i += 1) {
-      const playerIndex = this.getPlayerIndex(client.id, roomId);
-      if (playerIndex !== -1) {
-        this.rooms[roomId].players.splice(playerIndex, 1);
-        break;
-      }
+    const playerIndex = this.getPlayerIndex(client.id, roomId);
+    if (playerIndex !== -1) {
+      this.rooms[roomId].players.splice(playerIndex, 1);
     }
     if (!this.rooms[roomId].players.length) {
       delete this.rooms[roomId];
