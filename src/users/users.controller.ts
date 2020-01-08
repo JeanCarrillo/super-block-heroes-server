@@ -25,9 +25,14 @@ export class UsersController {
     return this.service.getUsers();
   }
 
-  @Get(':id')
+  @Get(':id([0-9]+)')
   findById(@Param() params): Promise<User> {
     return this.service.getUser(params.id);
+  }
+
+  @Get('highscores')
+  findHighscores(): Promise<User[]> {
+    return this.service.getHighscores();
   }
 
   @Get('nickname/:nickname')
@@ -51,6 +56,7 @@ export class UsersController {
 
     response.json(user);
   }
+
 
   @Post()
   create(@Body() user: User): Promise<any> {
