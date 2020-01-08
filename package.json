@@ -19,11 +19,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -f ormconfig.json",
-    "db:migration:generate": "yarn typeorm:cli migration:generate",
-    "db:migration:create": "yarn typeorm:cli migration:create",
-    "db:migrate": "yarn typeorm:cli migration:run",
-    "query": "yarn typeorm:cli query"
+    "db:migration:generate": "yarn run typeorm migration:generate -n",
+    "db:migration:create": "yarn run typeorm migration:create",
+    "db:migrate": "yarn run typeorm migration:run",
+    "query": "yarn typeorm query"
   },
   "dependencies": {
     "@nestjs/common": "^6.10.14",
