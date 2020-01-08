@@ -30,40 +30,56 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: any) {
     console.log('a user disconnected: ' + client.id);
-    const room = this.playersRoomsIds[client.id];
-    console.log({ room });
-    if (!room) {
+    const roomId = this.playersRoomsIds[client.id];
+    console.log({ roomId });
+    if (!roomId) {
       return;
     }
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.rooms[room].players.length; i += 1) {
-      const playerIndex = this.getPlayerIndex(client.id, room);
+    for (let i = 0; i < this.rooms[roomId].players.length; i += 1) {
+      const playerIndex = this.getPlayerIndex(client.id, roomId);
       if (playerIndex !== -1) {
-        this.rooms[room].players.splice(playerIndex, 1);
+        this.rooms[roomId].players.splice(playerIndex, 1);
         break;
       }
     }
-    if (!this.rooms[room].players.length) {
-      delete this.rooms[room];
+    if (!this.rooms[roomId].players.length) {
+      delete this.rooms[roomId];
     }
     if (this.playersRoomsIds[client.id]) {
       delete this.playersRoomsIds[client.id];
     }
-    if (this.rooms[room]) {
-      this.emitRoom(room);
+    if (this.rooms[roomId]) {
+      this.emitRoom(roomId);
     }
     console.log('rooms', this.rooms);
   }
 
-  private getPlayerIndex(playerId: string, room: string): number {
-    return this.rooms[room].players.findIndex(
+  private getPlayerIndex(playerId: string, roomId: string): number {
+    return this.rooms[roomId].players.findIndex(
       player => player.socketId === playerId,
     );
   }
 
   // Emits the room object to all users in this room
-  private emitRoom(room: string) {
-    this.server.to(room).emit('room', this.rooms[room]);
+  private emitRoom(roomId: string) {
+    this.server.to(roomId).emit('room', this.rooms[roomId]);
+  }
+
+  private createRoom(): string {
+    let created = false;
+    let counter = 0;
+    let roomId;
+    while (!created) {
+      if (!this.rooms[counter]) {
+        this.rooms[counter] = RoomModel;
+        roomId = counter.toString();
+        created = true;
+      } else {
+        counter += 1;
+      }
+    }
+    return roomId;
   }
 
   @SubscribeMessage('join')
@@ -75,35 +91,42 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     user.socketId = client.id;
     // Clear confidential data if any
     user = clearSensibleData(user);
-    const roomsKeys = Object.keys(this.rooms);
+
+    let roomsKeys = Object.keys(this.rooms);
+    let roomIdToJoin = null;
+
+    // If no room, create one
     if (!roomsKeys.length) {
-      this.rooms['0'] = RoomModel;
+      this.createRoom();
+      roomsKeys = Object.keys(this.rooms);
     }
-    let roomToJoin = null;
+
+    // Look in all rooms until it finds a room with less than 4 players where the game isn't started yet
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < roomsKeys.length; i += 1) {
       if (
-        this.rooms[roomsKeys[i]] &&
         this.rooms[roomsKeys[i]].players.length < 4 &&
         !this.rooms[roomsKeys[i]].started
       ) {
-        roomToJoin = roomsKeys[i];
+        roomIdToJoin = roomsKeys[i];
         break;
       }
     }
-    if (!roomToJoin) {
-      roomToJoin = roomsKeys.length;
-      this.rooms[roomToJoin] = RoomModel;
+    // If we didn't find any room that matches, create one
+    if (!roomIdToJoin) {
+      roomIdToJoin = this.createRoom();
     }
-    const room = roomToJoin.toString();
-    this.playersRoomsIds[client.id] = room;
-    const playerIndex = this.getPlayerIndex(client.id, room);
-    console.log({ playerIndex });
+    // Register room ID in playersRoomsIds
+    this.playersRoomsIds[client.id] = roomIdToJoin;
+
+    // If player is NOT already in the room, push him into the room object
+    const playerIndex = this.getPlayerIndex(client.id, roomIdToJoin);
     if (playerIndex === -1) {
-      this.rooms[room].players.push(user);
+      this.rooms[roomIdToJoin].players.push(user);
     }
-    client.join(room);
-    this.emitRoom(room);
+
+    client.join(roomIdToJoin);
+    this.emitRoom(roomIdToJoin);
   }
 
   @SubscribeMessage('chat')
@@ -111,13 +134,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() message: string,
     @ConnectedSocket() client: Socket,
   ): void {
-    const room = this.playersRoomsIds[client.id];
-    const playerIndex = this.getPlayerIndex(client.id, room);
-    this.rooms[room].messages.push({
+    const roomId = this.playersRoomsIds[client.id];
+    const playerIndex = this.getPlayerIndex(client.id, roomId);
+    this.rooms[roomId].messages.push({
       text: message,
-      author: this.rooms[room].players[playerIndex].nickname,
+      author: this.rooms[roomId].players[playerIndex].nickname,
     });
-    this.emitRoom(room);
+    this.emitRoom(roomId);
   }
 
   @SubscribeMessage('start')
@@ -125,10 +148,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() monster: any,
     @ConnectedSocket() client: Socket,
   ): void {
-    const room = this.playersRoomsIds[client.id];
-    this.rooms[room].started = true;
-    this.rooms[room].monster = monster;
-    this.emitRoom(room);
+    const roomId = this.playersRoomsIds[client.id];
+    this.rooms[roomId].started = true;
+    this.rooms[roomId].monster = monster;
+    this.emitRoom(roomId);
   }
 
   @SubscribeMessage('gameEvent')
@@ -136,11 +159,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() event: any,
     @ConnectedSocket() client: Socket,
   ): void {
-    const room = this.playersRoomsIds[client.id];
+    const roomId = this.playersRoomsIds[client.id];
     if (event.eventType === 'useCapacity') {
-      this.server.to(room).emit('gameEvent', event);
+      this.server.to(roomId).emit('gameEvent', event);
     } else {
-      client.to(room).broadcast.emit('gameEvent', event);
+      client.to(roomId).broadcast.emit('gameEvent', event);
     }
   }
 }
