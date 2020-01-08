@@ -8,25 +8,21 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
+import { clearSensibleData } from './functions';
+
+const RoomModel = {
+  players: [],
+  messages: [],
+  monster: {},
+  started: false,
+};
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
-
-  rooms = [
-    {
-      players: [],
-      messages: [],
-      monster: {},
-      game: {
-        players: [],
-        victory: false,
-        defeat: false,
-      },
-      started: false,
-    },
-  ];
+  playersRoomsIds: any = {};
+  rooms: any = {};
 
   handleConnection(client: any) {
     console.log('new user connected: ' + client.id);
@@ -34,73 +30,80 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: any) {
     console.log('a user disconnected: ' + client.id);
-    for (const player of this.rooms[0].players) {
-      const playerIndex = this.getPlayerIndex(client.id);
+    const room = this.playersRoomsIds[client.id];
+    console.log({ room });
+    if (!room) {
+      return;
+    }
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.rooms[room].players.length; i += 1) {
+      const playerIndex = this.getPlayerIndex(client.id, room);
       if (playerIndex !== -1) {
-        this.rooms[0].players.splice(playerIndex, 1);
-        this.rooms[0].game.players.splice(playerIndex, 1);
+        this.rooms[room].players.splice(playerIndex, 1);
+        break;
       }
     }
-    if (!this.rooms[0].players.length) {
-      this.rooms[0].started = false;
+    if (!this.rooms[room].players.length) {
+      delete this.rooms[room];
+    }
+    if (this.playersRoomsIds[client.id]) {
+      delete this.playersRoomsIds[client.id];
+    }
+    if (this.rooms[room]) {
+      this.emitRoom(room);
     }
     console.log('rooms', this.rooms);
-    this.emitRoom();
   }
 
-  private getPlayerIndex(playerId: string): number {
-    return this.rooms[0].players.findIndex(
+  private getPlayerIndex(playerId: string, room: string): number {
+    return this.rooms[room].players.findIndex(
       player => player.socketId === playerId,
     );
   }
 
-  private emitRoom() {
-    this.server.emit('room', this.rooms[0]);
-    console.log(this.rooms[0]);
+  // Emits the room object to all users in this room
+  private emitRoom(room: string) {
+    this.server.to(room).emit('room', this.rooms[room]);
   }
-
-  private emitGame() {
-    this.server.emit('game', this.rooms[0].game);
-  }
-
-  // private emitPlayer(data: any) {
-  //   this.server.emit('player', {
-  //     index: playerIndex,
-  //     data: this.rooms[0].players[playerIndex],
-  //   });
-  // }
 
   @SubscribeMessage('join')
   handleJoin(
     @MessageBody() user: any,
     @ConnectedSocket() client: Socket,
   ): void {
-    // TO DO : CREATE DIFFERENT ROOMS
-    // const roomsIds = Object.keys(this.rooms);
-    // if (!roomsIds.length) {
-    //   this.createRoom(client);
-    // }
-    // for (const roomId of roomsIds) {
-    //   if (this.rooms[roomId].players.length < 4) {
-    //     this.joinRoom(roomId, client.id);
-    //   }
-    // }
-
     // Add socket id before storing user object
     user.socketId = client.id;
     // Clear confidential data if any
-    if (user.email) {
-      delete user.email;
+    user = clearSensibleData(user);
+    const roomsKeys = Object.keys(this.rooms);
+    if (!roomsKeys.length) {
+      this.rooms['0'] = RoomModel;
     }
-    if (user.id) {
-      delete user.id;
+    let roomToJoin = null;
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < roomsKeys.length; i += 1) {
+      if (
+        this.rooms[roomsKeys[i]] &&
+        this.rooms[roomsKeys[i]].players.length < 4 &&
+        !this.rooms[roomsKeys[i]].started
+      ) {
+        roomToJoin = roomsKeys[i];
+        break;
+      }
     }
-    if (user.password) {
-      delete user.password;
+    if (!roomToJoin) {
+      roomToJoin = roomsKeys.length;
+      this.rooms[roomToJoin] = RoomModel;
     }
-    this.rooms[0].players.push(user);
-    this.rooms[0].game.players.push({});
-    this.emitRoom();
+    const room = roomToJoin.toString();
+    this.playersRoomsIds[client.id] = room;
+    const playerIndex = this.getPlayerIndex(client.id, room);
+    console.log({ playerIndex });
+    if (playerIndex === -1) {
+      this.rooms[room].players.push(user);
+    }
+    client.join(room);
+    this.emitRoom(room);
   }
 
   @SubscribeMessage('chat')
@@ -108,21 +111,24 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() message: string,
     @ConnectedSocket() client: Socket,
   ): void {
-    const playerIndex = this.getPlayerIndex(client.id);
-    this.rooms[0].messages.push({
+    const room = this.playersRoomsIds[client.id];
+    const playerIndex = this.getPlayerIndex(client.id, room);
+    this.rooms[room].messages.push({
       text: message,
-      author: this.rooms[0].players[playerIndex].nickname,
+      author: this.rooms[room].players[playerIndex].nickname,
     });
-    this.emitRoom();
-    // this.server.emit('messages', this.rooms[0].messages);
+    this.emitRoom(room);
   }
 
   @SubscribeMessage('start')
-  handleStart(@MessageBody() monster: any): void {
-    this.rooms[0].started = true;
-    this.rooms[0].monster = monster;
-    this.emitRoom();
-    // this.server.emit('messages', this.rooms[0].messages);
+  handleStart(
+    @MessageBody() monster: any,
+    @ConnectedSocket() client: Socket,
+  ): void {
+    const room = this.playersRoomsIds[client.id];
+    this.rooms[room].started = true;
+    this.rooms[room].monster = monster;
+    this.emitRoom(room);
   }
 
   @SubscribeMessage('gameEvent')
@@ -130,13 +136,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() event: any,
     @ConnectedSocket() client: Socket,
   ): void {
-    console.log({ event });
-    this.rooms[0].game.players[event.playerIndex][event.eventType] =
-      event[event.eventType];
+    const room = this.playersRoomsIds[client.id];
     if (event.eventType === 'useCapacity') {
-      this.server.emit('gameEvent', event);
+      this.server.to(room).emit('gameEvent', event);
     } else {
-      client.broadcast.emit('gameEvent', event);
+      client.to(room).broadcast.emit('gameEvent', event);
     }
   }
 }
