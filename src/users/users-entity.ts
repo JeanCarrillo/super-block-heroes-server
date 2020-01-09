@@ -45,6 +45,9 @@ export class User {
   // TODO: ajouter la valeur par défaut d'un héro
   @ManyToOne(type => Hero)
   hero: Hero;
+
+  @Column("simple-array")
+  invitations: string[];
 }
 
 // @CreateDateColumn({

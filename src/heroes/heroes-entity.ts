@@ -18,9 +18,6 @@ export class Hero {
   @Column({ type: 'int' })
   price: number;
 
-  @Column({ length: 255 })
-  sprites: string;
-
   @ManyToMany(type => Capacity, { cascade: true })
   @JoinTable({
     name: 'hero_capacities_capacity',

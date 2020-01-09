@@ -26,6 +26,7 @@ export class UsersService {
         'inventory',
         'games_played',
         'highscore',
+        'invitations',
       ],
       relations: ['hero'],
     });
