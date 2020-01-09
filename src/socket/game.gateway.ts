@@ -30,6 +30,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: any) {
     console.log('a user disconnected: ' + client.id);
+    this.leaveRoom(client);
+  }
+
+  // Triggered when a player goes to main menu : leave current room
+  @SubscribeMessage('mainMenu')
+  handleMainMenu(@ConnectedSocket() client: Socket): void {
+    const roomId = this.playersRoomsIds[client.id];
+    client.leave(roomId);
+    this.leaveRoom(client);
+  }
+
+  private leaveRoom(client: any) {
     const roomId = this.playersRoomsIds[client.id];
     if (!roomId) {
       return;
