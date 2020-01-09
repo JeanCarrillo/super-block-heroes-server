@@ -46,7 +46,7 @@ export class User {
   @ManyToOne(type => Hero)
   hero: Hero;
 
-  @Column("simple-array")
+  @Column('simple-array')
   invitations: string[];
 }
 

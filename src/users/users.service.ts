@@ -8,7 +8,7 @@ import * as crypto from 'crypto';
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async getUsers(): Promise<User[]> {
     return await this.usersRepository.find();
@@ -82,15 +82,10 @@ export class UsersService {
 
   async getHighscores(): Promise<User[]> {
     const highscores = await this.usersRepository.find({
-      select: [
-        "id",
-        "nickname",
-        "highscore",
-        "hero",
-      ],
+      select: ['id', 'nickname', 'highscore', 'hero'],
       relations: ['hero'],
       order: {
-        highscore: 'DESC'
+        highscore: 'DESC',
       },
       take: 10,
     });
@@ -102,6 +97,7 @@ export class UsersService {
   async createUser(user: User): Promise<User> {
     return await this.usersRepository.save({
       ...user,
+      invitations: [],
       password: crypto.createHmac('sha256', user.password).digest('hex'),
     });
   }
@@ -113,5 +109,4 @@ export class UsersService {
   async deleteUser(id): Promise<DeleteResult> {
     return await this.usersRepository.delete(id);
   }
-
 }
