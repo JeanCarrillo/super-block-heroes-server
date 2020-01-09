@@ -66,8 +66,24 @@ export class UsersController {
     });
   }
 
+
+  @Put('invite/:id')
+  inviteUser(@Param('id') id, @Body() data: any): void {
+    console.log('InviteUser()');
+    console.log(data.nickname);
+    this.service.getUser(id).then((user) => {
+      user.invitations.push(data.nickname);
+      console.log({user});
+      return this.service.updateUser(user)
+        .then((updatedUser) => {
+          console.log({ updatedUser });
+          return updatedUser;
+        });
+    });
+  }
+
   @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
+  @Put(':id([0-9]+)')
   update(@Param('id') id, @Body() user: User): Promise<User> {
     user.id = Number(id);
     console.log('Update #' + user.id);
