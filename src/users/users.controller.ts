@@ -53,10 +53,8 @@ export class UsersController {
     if (user === undefined) {
       response.sendStatus(404);
     }
-
     response.json(user);
   }
-
 
   @Post()
   create(@Body() user: User): Promise<any> {
@@ -76,8 +74,8 @@ export class UsersController {
   @Put('invite/:id')
   inviteUser(@Param('id') id, @Body() data: any): void {
     console.log('InviteUser()');
-    console.log(data.nickname);
-    this.service.getUser(id).then((user) => {
+    console.log("gg",data);
+    this.service.getUser(Number(id)).then((user) => {
       user.invitations.push(data.nickname);
       console.log({user});
       return this.service.updateUser(user)
@@ -86,6 +84,35 @@ export class UsersController {
           return updatedUser;
         });
     });
+  }
+
+  @Put('addFriend/:nickname')
+  addFriend(@Param('nickname') nickname, @Body() data: any): void {
+    this.service.getUserByNickname(nickname).then((user) => {
+      user.friends.push(data.nickname);
+      user.invitations.map((friend, i) => {
+        console.log('friend=>', friend);
+        if (friend == data.nickname) {
+          console.log('friend In invitations');
+          user.invitations.splice(i, 1);
+          return;
+        }
+      });
+      console.log({user});
+
+      return this.service.updateUser(user)
+        .then((updatedUser) => {
+          console.log({ updatedUser });
+          return updatedUser;
+        });
+    });
+
+    this.service.getUserByNickname(data.nickname)
+      .then((user) => {
+        user.friends.push(nickname);
+        console.log('me =>', user);
+      });
+
   }
 
   @UseGuards(AuthGuard('jwt'))
