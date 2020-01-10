@@ -160,7 +160,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ): void {
     const roomId = this.playersRoomsIds[client.id];
-    if (event.eventType === 'useCapacity' || event.eventType === 'score') {
+    if (event.eventType === 'useCapacity') {
       this.server.to(roomId).emit('gameEvent', event);
     } else {
       client.to(roomId).broadcast.emit('gameEvent', event);

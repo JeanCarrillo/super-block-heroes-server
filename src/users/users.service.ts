@@ -103,6 +103,7 @@ export class UsersService {
     return await this.usersRepository.save({
       ...user,
       invitations: [],
+      friends: [],
       password: crypto.createHmac('sha256', user.password).digest('hex'),
     });
   }

@@ -70,49 +70,59 @@ export class UsersController {
     });
   }
 
-
   @Put('invite/:id')
   inviteUser(@Param('id') id, @Body() data: any): void {
     console.log('InviteUser()');
-    console.log("gg",data);
-    this.service.getUser(Number(id)).then((user) => {
+    console.log('gg', data);
+    this.service.getUser(Number(id)).then(user => {
       user.invitations.push(data.nickname);
-      console.log({user});
-      return this.service.updateUser(user)
-        .then((updatedUser) => {
-          console.log({ updatedUser });
-          return updatedUser;
-        });
+      console.log({ user });
+      return this.service.updateUser(user).then(updatedUser => {
+        console.log({ updatedUser });
+        return updatedUser;
+      });
     });
   }
 
   @Put('addFriend/:nickname')
-  addFriend(@Param('nickname') nickname, @Body() data: any): void {
-    this.service.getUserByNickname(nickname).then((user) => {
-      user.friends.push(data.nickname);
-      user.invitations.map((friend, i) => {
-        console.log('friend=>', friend);
-        if (friend == data.nickname) {
-          console.log('friend In invitations');
-          user.invitations.splice(i, 1);
-          return;
+  addFriend(
+    @Param('nickname') nickname,
+    @Body() data: any,
+    @Res() response,
+  ): Promise<any> {
+    return this.service.getUserByNickname(nickname).then(user => {
+      console.log({ nickname }); // USER => MY FRIEND
+      console.log(data.nickname); // ME
+      if (user.friends.findIndex(friend => user.nickname === friend) === -1) {
+        user.friends.push(data.nickname);
+      }
+      const invitIndex = user.invitations.findIndex(
+        invite => data.nickname === invite,
+      );
+      if (invitIndex !== -1) {
+        user.invitations.splice(invitIndex, 1);
+      }
+      console.log({ user });
+
+      this.service.updateUser(user);
+
+      return this.service.getUserByNickname(data.nickname).then(myUser => {
+        console.log({ myUser });
+        if (myUser.friends.findIndex(friend => nickname === friend) === -1) {
+          myUser.friends.push(nickname);
         }
-      });
-      console.log({user});
-
-      return this.service.updateUser(user)
-        .then((updatedUser) => {
-          console.log({ updatedUser });
-          return updatedUser;
+        const index = myUser.invitations.findIndex(
+          invite => nickname === invite,
+        );
+        if (index !== -1) {
+          myUser.invitations.splice(index, 1);
+        }
+        return this.service.updateUser(myUser).then(() => {
+          console.log('myid ' + myUser.id);
+          return this.service.getUser(Number(myUser.id));
         });
-    });
-
-    this.service.getUserByNickname(data.nickname)
-      .then((user) => {
-        user.friends.push(nickname);
-        console.log('me =>', user);
       });
-
+    });
   }
 
   @UseGuards(AuthGuard('jwt'))
