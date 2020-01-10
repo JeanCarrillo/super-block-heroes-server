@@ -8,7 +8,6 @@ import { HeroesModule } from './heroes/heroes.module';
 import { ClubModule } from './clubs/clubs.module';
 import { CapacityModule } from './capacities/capacities.module';
 import { GameModule } from './games/games.module';
-import { FriendsModule } from './friends/friends.module';
 import { Connection } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { GameGateway } from './socket/game.gateway';
@@ -22,7 +21,6 @@ import { GameGateway } from './socket/game.gateway';
     ClubModule,
     CapacityModule,
     GameModule,
-    FriendsModule,
     AuthModule,
   ],
   controllers: [AppController],

@@ -3,6 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
   // CreateDateColumn,
   // UpdateDateColumn,
   // BeforeInsert,
@@ -48,6 +49,9 @@ export class User {
 
   @Column('simple-array')
   invitations: string[];
+
+  @Column('simple-array')
+  friends: string[];
 }
 
 // @CreateDateColumn({

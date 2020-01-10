@@ -27,6 +27,7 @@ export class UsersService {
         'games_played',
         'highscore',
         'invitations',
+        'friends',
       ],
       relations: ['hero'],
     });
@@ -44,6 +45,8 @@ export class UsersService {
         'highscore',
         'games_played',
         'inventory',
+        'invitations',
+        'friends',
       ],
       relations: ['hero'],
     });
@@ -61,6 +64,8 @@ export class UsersService {
         'highscore',
         'games_played',
         'inventory',
+        'invitations',
+        'friends',
       ],
       relations: ['hero'],
     });
