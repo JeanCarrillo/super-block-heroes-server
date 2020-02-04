@@ -25,6 +25,10 @@ export class AuthService {
     return await this.usersService.getUserByEmail(userData.email);
   }
 
+  public async verifyToken(token: string) {
+    console.log('token ', token);
+  }
+
   public async login(user: User): Promise<any | { status: number }> {
     console.log({ user });
     if (user.nickname !== '') {

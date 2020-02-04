@@ -9,6 +9,10 @@ export class AuthController {
   async login(@Body() user: User): Promise<any> {
     return this.authService.login(user);
   }
+  @Post('token')
+  async checkToken(@Body() token: any): Promise<any> {
+    return this.authService.verifyToken(token) ;
+  }
   @Post('register')
   async register(@Body() user: User): Promise<any> {
     return this.authService.register(user);
