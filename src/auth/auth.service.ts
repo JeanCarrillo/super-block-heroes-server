@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/users-entity';
 import * as crypto from 'crypto';
@@ -27,6 +28,9 @@ export class AuthService {
 
   public async verifyToken(token: string) {
     console.log('token ', token);
+    const verified = this.jwtService.decode(token);
+    console.log({verified});
+      
   }
 
   public async login(user: User): Promise<any | { status: number }> {
