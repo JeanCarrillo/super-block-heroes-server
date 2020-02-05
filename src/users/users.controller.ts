@@ -7,9 +7,7 @@ import {
   Delete,
   Param,
   Res,
-  HttpException,
-  HttpStatus,
-  Catch,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -127,7 +125,8 @@ export class UsersController {
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':id([0-9]+)')
-  update(@Param('id') id, @Body() user: User): Promise<User> {
+  update(@Param('id') id, @Body() user: User, @Request() req): Promise<User> {
+    console.log('JWT GUARD PUT');
     user.id = Number(id);
     console.log('Update #' + user.id);
     console.log({ user });
