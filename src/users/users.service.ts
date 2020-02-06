@@ -18,7 +18,8 @@ export class UsersService {
   }
 
   async getUser(id): Promise<User> {
-    return await this.usersRepository.findOne({
+    const capacities = await this.CapacitiesRepository.find();
+    const user = await this.usersRepository.findOne({
       where: { id },
       select: [
         'id',
@@ -26,14 +27,21 @@ export class UsersService {
         'email',
         'gold',
         'hero',
-        'inventory',
-        'games_played',
         'highscore',
+        'games_played',
+        'inventory',
         'invitations',
         'friends',
       ],
       relations: ['hero'],
     });
+    for (const capacity of capacities) {
+      if (capacity.id === user.hero.id) {
+        user.hero.capacity = capacity;
+        break;
+      }
+    }
+    return user;
   }
 
   async getUserByNickname(nickname: string): Promise<User> {
