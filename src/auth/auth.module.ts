@@ -9,6 +9,9 @@ import { JwtStrategy } from './jwt.strategy';
 import { Capacity } from 'src/capacities/capacities-entity';
 import { CapacitiesService } from 'src/capacities/capacities.service';
 
+console.log('AUTH MODULE');
+console.log(process.env.JWT_SECRET);
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Capacity]),
