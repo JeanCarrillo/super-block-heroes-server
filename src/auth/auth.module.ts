@@ -13,7 +13,7 @@ import { CapacitiesService } from 'src/capacities/capacities.service';
   imports: [
     TypeOrmModule.forFeature([User, Capacity]),
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secretOrPrivateKey: process.env.JWT_SECRET,
       signOptions: { expiresIn: '600000000000s' },
     }),
   ],
