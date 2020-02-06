@@ -1,18 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-// import * as fs from 'fs';
+import { config } from 'dotenv';
+import * as fs from 'fs';
 
-// const httpsOptions = {
-//   key: fs.readFileSync('./secrets/private-key.pem'),
-//   cert: fs.readFileSync('./secrets/public-certificate.pem'),
-// };
+config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  // const app = await NestFactory.create(AppModule, {
-  //   httpsOptions,
-  // });
-  app.enableCors();
-  await app.listen(3000);
+  if (process.env.HTTPS === 'true') {
+    const httpsOptions = {
+      key: fs.readFileSync(`${process.env.CERT_PATH}/private-key.pem`),
+      cert: fs.readFileSync(`${process.env.CERT_PATH}/public-certificate.pem`),
+    };
+    const app = await NestFactory.create(AppModule, {
+      httpsOptions,
+    });
+    app.enableCors();
+    await app.listen(process.env.PORT);
+  } else {
+    const app = await NestFactory.create(AppModule);
+    app.enableCors();
+    await app.listen(process.env.PORT);
+  }
 }
 bootstrap();
