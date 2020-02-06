@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { Capacity } from 'src/capacities/capacities-entity';
 import { CapacitiesService } from 'src/capacities/capacities.service';
-import config from '../../serverConf';
+import config from '../../config.json';
 
 @Module({
   imports: [

@@ -389,7 +389,7 @@ Temporary Items
 # Local
 docker-compose.yml
 dist
-serverConf.js
+config.json
 
 # TypeOrm
 ormconfig.json
