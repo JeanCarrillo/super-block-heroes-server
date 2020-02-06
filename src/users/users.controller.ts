@@ -75,6 +75,12 @@ export class UsersController {
     console.log('InviteUser()');
     console.log('gg', data);
     this.service.getUser(Number(id)).then(user => {
+      // const invit = user.invitations.findIndex(invitation => (invitation === data.nickname));
+
+      for (let i = 0; i < user.invitations.length; i++) {
+        let alreadyIn = (user.invitations[i] === data.nickname);
+        alreadyIn && user.invitations.splice(i, 1);
+      }
       user.invitations.push(data.nickname);
       console.log({ user });
       return this.service.updateUser(user).then(updatedUser => {
@@ -84,41 +90,46 @@ export class UsersController {
     });
   }
 
-  @Put('addFriend/:nickname')
+  @Put('addFriend/:friendName')
   addFriend(
-    @Param('nickname') nickname,
+    @Param('friendName') friendName,
     @Body() data: any,
     @Res() response,
   ): Promise<any> {
-    return this.service.getUserByNickname(nickname).then(user => {
-      console.log({ nickname }); // USER => MY FRIEND
-      console.log(data.nickname); // ME
-      if (user.friends.findIndex(friend => user.nickname === friend) === -1) {
-        user.friends.push(data.nickname);
-      }
-      const invitIndex = user.invitations.findIndex(
-        invite => data.nickname === invite,
-      );
-      if (invitIndex !== -1) {
-        user.invitations.splice(invitIndex, 1);
-      }
-      console.log({ user });
+    return this.service.getUserByNickname(friendName).then(friend => {
+      const myName = data.nickname;
+      console.log('la personne qui sera mon ami',{ friendName }); // USER => MY FRIEND
+      console.log('moi même', myName); // ME
 
-      this.service.updateUser(user);
+      console.log('findIndex :', friend.friends.findIndex(friend => myName === friend));
 
-      return this.service.getUserByNickname(data.nickname).then(myUser => {
-        console.log({ myUser });
-        if (myUser.friends.findIndex(friend => nickname === friend) === -1) {
-          myUser.friends.push(nickname);
-        }
-        const index = myUser.invitations.findIndex(
-          invite => nickname === invite,
-        );
-        if (index !== -1) {
-          myUser.invitations.splice(index, 1);
+      const findIndex = friend.friends.findIndex(friend =>myName === friend);
+
+      if (findIndex !== -1 ) {
+        return response.sendStatus(403);
+      } else {
+        console.log(findIndex);
+        friend.friends.push(myName);
+        const invitIndex = friend.invitations.findIndex(invit => invit === myName);
+        (invitIndex !== -1) && friend.invitations.splice(invitIndex, 1);
+      }
+      this.service.updateUser(friend);
+
+      return this.service.getUserByNickname(myName).then(myUser => {
+        const myfriendFindIndex = myUser.friends.findIndex(friend => friend === friendName);
+        
+        if (myfriendFindIndex !== -1 ) {
+          return response.sendStatus(403);
+        } else {
+          console.log(myfriendFindIndex);
+          myUser.friends.push(friendName);
+          const invitIndex = myUser.invitations.findIndex(invit => invit === friendName);
+
+          (invitIndex !== -1) && myUser.invitations.splice(invitIndex, 1);
         }
         return this.service.updateUser(myUser).then(() => {
           console.log('myid ' + myUser.id);
+          console.log('myUser', myUser);
           return this.service.getUser(Number(myUser.id));
         });
       });
