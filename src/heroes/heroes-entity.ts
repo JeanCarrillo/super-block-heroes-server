@@ -24,7 +24,7 @@ export class Hero {
     joinColumn: { name: 'hero_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'capacity_id', referencedColumnName: 'id' },
   })
-  capacities: Capacity[];
+  capacity: Capacity;
   // @Column('date')
   // created_at: Date;
 

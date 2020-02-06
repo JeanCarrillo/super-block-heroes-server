@@ -7,16 +7,18 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { secretKey } from '../constants';
 import { JwtStrategy } from './jwt.strategy';
+import { Capacity } from 'src/capacities/capacities-entity';
+import { CapacitiesService } from 'src/capacities/capacities.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Capacity]),
     JwtModule.register({
       secret: secretKey,
       signOptions: { expiresIn: '600000000000s' },
     }),
   ],
   controllers: [AuthController],
-  providers: [UsersService, AuthService, JwtStrategy],
+  providers: [UsersService, AuthService, JwtStrategy, CapacitiesService],
 })
 export class AuthModule {}

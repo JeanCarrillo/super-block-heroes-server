@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult, DeleteResult, EntityManager } from 'typeorm';
 import { User } from './users-entity';
 import * as crypto from 'crypto';
+import { Capacity } from 'src/capacities/capacities-entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(Capacity)
+    private CapacitiesRepository: Repository<Capacity>,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -34,7 +37,8 @@ export class UsersService {
   }
 
   async getUserByNickname(nickname: string): Promise<User> {
-    return await this.usersRepository.findOne({
+    const capacities = await this.CapacitiesRepository.find();
+    const user = await this.usersRepository.findOne({
       where: { nickname },
       select: [
         'id',
@@ -50,6 +54,13 @@ export class UsersService {
       ],
       relations: ['hero'],
     });
+    for (const capacity of capacities) {
+      if (capacity.id === user.hero.id) {
+        user.hero.capacity = capacity;
+        break;
+      }
+    }
+    return user;
   }
 
   async getUserByEmail(email: string): Promise<User> {

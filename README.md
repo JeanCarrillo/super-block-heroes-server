@@ -20,7 +20,7 @@ Stack:
 - Delete dist directory in server if exists
 - Create the ormconfig.json file (example below)
 - Drop the MySql database if exists
-- Create the database
+- Create the database: sbheroes
 - Run server in terminal : npm start
 - Run the migration files in another terminal : typeorm migration:run
 - Kill and run server again in first terminal : npm run start:dev
