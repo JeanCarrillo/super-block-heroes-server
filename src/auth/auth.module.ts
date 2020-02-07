@@ -5,16 +5,16 @@ import { UsersService } from '../users/users.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { secretKey } from '../constants';
 import { JwtStrategy } from './jwt.strategy';
 import { Capacity } from 'src/capacities/capacities-entity';
 import { CapacitiesService } from 'src/capacities/capacities.service';
+import config from '../../config.json';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Capacity]),
     JwtModule.register({
-      secret: secretKey,
+      secretOrPrivateKey: config.jwtSecret,
       signOptions: { expiresIn: '600000000000s' },
     }),
   ],

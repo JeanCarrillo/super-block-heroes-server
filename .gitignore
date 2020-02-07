@@ -388,8 +388,8 @@ Temporary Items
 =======
 # Local
 docker-compose.yml
-.env
 dist
+config.json
 
 # TypeOrm
 ormconfig.json
